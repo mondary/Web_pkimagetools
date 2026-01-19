@@ -33,9 +33,6 @@
         <div class="canvas checker" id="originalWrap">
           <img id="originalImg" alt="Aperçu original" />
         </div>
-        <div class="actions">
-          <button id="processBtn" disabled>Détourer</button>
-        </div>
       </div>
       <div class="preview-col">
         <h2>Résultat (transparent)</h2>
@@ -43,11 +40,25 @@
           <img id="resultImg" alt="Aperçu résultat" />
         </div>
         <div class="actions">
+          <button id="cropBtn" class="secondary" disabled>Crop 1px</button>
           <button id="downloadBtn" class="secondary" disabled>Télécharger PNG</button>
         </div>
       </div>
     </section>
 
+    <div id="progress" class="progress" aria-hidden="true">
+      <div class="progress-track">
+        <div
+          id="progressBar"
+          class="progress-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        ></div>
+      </div>
+      <div id="progressText" class="progress-text"></div>
+    </div>
     <p id="status" class="status" aria-live="polite"></p>
     <div class="version-badge">v<span id="versionLabel"></span></div>
   </main>

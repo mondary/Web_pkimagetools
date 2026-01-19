@@ -170,6 +170,46 @@ canvas, img {
   color: #0d6d5f;
 }
 
+.progress {
+  margin-top: 12px;
+  display: none;
+}
+
+.progress.active {
+  display: block;
+}
+
+.progress-track {
+  height: 8px;
+  background: #e6e0d6;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.progress.indeterminate .progress-bar {
+  width: 40%;
+  animation: progress-indeterminate 1.2s infinite ease;
+}
+
+.progress-text {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #0d6d5f;
+  min-height: 18px;
+}
+
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
 @media (max-width: 760px) {
   .preview { grid-template-columns: 1fr; }
 }

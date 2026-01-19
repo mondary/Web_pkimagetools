@@ -1,16 +1,20 @@
-const VERSION = '1.0.5';
+const VERSION = '1.0.7';
 
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
-const processBtn = document.getElementById('processBtn');
 const downloadBtn = document.getElementById('downloadBtn');
+const cropBtn = document.getElementById('cropBtn');
 const originalImg = document.getElementById('originalImg');
 const resultImg = document.getElementById('resultImg');
 const statusEl = document.getElementById('status');
 const versionLabel = document.getElementById('versionLabel');
+const progressWrap = document.getElementById('progress');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
 
 let selectedFile = null;
 let resultBlob = null;
+let resultUrl = null;
 let session = null;
 let processing = false;
 
@@ -19,9 +23,46 @@ function setStatus(msg, isError = false) {
   statusEl.style.color = isError ? '#b00020' : '#0d6d5f';
 }
 
+function setProgress(value, text) {
+  if (!progressWrap || !progressBar || !progressText) return;
+
+  progressWrap.classList.add('active');
+  progressWrap.setAttribute('aria-hidden', 'false');
+
+  if (value === null || typeof value === 'undefined') {
+    progressWrap.classList.add('indeterminate');
+    progressBar.style.width = '40%';
+    progressBar.setAttribute('aria-valuenow', '0');
+  } else {
+    const pct = Math.max(0, Math.min(100, Math.round(value)));
+    progressWrap.classList.remove('indeterminate');
+    progressBar.style.width = `${pct}%`;
+    progressBar.setAttribute('aria-valuenow', String(pct));
+  }
+
+  progressText.textContent = text || '';
+}
+
+function hideProgress() {
+  if (!progressWrap || !progressBar || !progressText) return;
+  progressWrap.classList.remove('active', 'indeterminate');
+  progressWrap.setAttribute('aria-hidden', 'true');
+  progressBar.style.width = '0%';
+  progressBar.setAttribute('aria-valuenow', '0');
+  progressText.textContent = '';
+}
+
 function updateButtons() {
-  processBtn.disabled = !selectedFile;
+  if (cropBtn) cropBtn.disabled = !resultBlob;
   downloadBtn.disabled = !resultBlob;
+}
+
+function setResult(blob) {
+  resultBlob = blob;
+  if (resultUrl) URL.revokeObjectURL(resultUrl);
+  resultUrl = URL.createObjectURL(blob);
+  resultImg.src = resultUrl;
+  updateButtons();
 }
 
 function handleFile(file) {
@@ -33,7 +74,8 @@ function handleFile(file) {
   resultBlob = null;
   resultImg.src = '';
   originalImg.src = URL.createObjectURL(file);
-  setStatus('Image chargée. Détourage en cours...');
+  setStatus('Image chargée. Préparation du détourage...');
+  setProgress(null, 'Préparation…');
   updateButtons();
   autoProcess();
 }
@@ -67,11 +109,11 @@ async function ensureSession() {
   });
 }
 
-processBtn.addEventListener('click', async () => {
+async function runProcess() {
   if (!selectedFile || processing) return;
 
   setStatus('Traitement en cours...');
-  processBtn.disabled = true;
+  setProgress(null, 'Initialisation…');
   processing = true;
 
   try {
@@ -82,37 +124,139 @@ processBtn.addEventListener('click', async () => {
       session,
       onProgress: (p) => {
         const pct = Math.round(p * 100);
-        setStatus(`Traitement ${pct}%...`);
+        if (!Number.isFinite(pct)) {
+          setProgress(null, 'Traitement en cours...');
+          return;
+        }
+        setProgress(pct, `Traitement ${pct}%`);
       },
     });
 
-    resultBlob = result;
-    resultImg.src = URL.createObjectURL(resultBlob);
+    setResult(result);
     setStatus('Détourage terminé.');
+    setProgress(100, '');
   } catch (err) {
     console.error(err);
     setStatus(
       'Erreur: ' + (err.message || 'Impossible de détourer.'),
       true
     );
+    hideProgress();
   } finally {
-    processBtn.disabled = false;
     processing = false;
     updateButtons();
   }
-});
+}
 
 downloadBtn.addEventListener('click', () => {
   if (!resultBlob) return;
-  const url = URL.createObjectURL(resultBlob);
   const a = document.createElement('a');
-  a.href = url;
+  a.href = resultUrl || URL.createObjectURL(resultBlob);
   a.download = 'detourage.png';
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(url);
+  if (!resultUrl) URL.revokeObjectURL(a.href);
 });
+
+async function loadImageFromBlob(blob) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Chargement image échoué.'));
+    };
+    img.src = url;
+  });
+}
+
+const CROP_ALPHA_THRESHOLD = 8;
+
+async function cropToOnePixelBorder() {
+  if (!resultBlob || processing) return;
+  processing = true;
+  setStatus('Crop en cours...');
+  setProgress(null, 'Analyse des bords...');
+
+  try {
+    const img = await loadImageFromBlob(resultBlob);
+    const width = img.naturalWidth || img.width;
+    const height = img.naturalHeight || img.height;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(img, 0, 0);
+
+    const { data } = ctx.getImageData(0, 0, width, height);
+    let minX = width;
+    let minY = height;
+    let maxX = -1;
+    let maxY = -1;
+
+    for (let y = 0; y < height; y++) {
+      const rowOffset = y * width * 4;
+      for (let x = 0; x < width; x++) {
+        const alpha = data[rowOffset + x * 4 + 3];
+        if (alpha > CROP_ALPHA_THRESHOLD) {
+          if (x < minX) minX = x;
+          if (y < minY) minY = y;
+          if (x > maxX) maxX = x;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+
+    if (maxX < 0 || maxY < 0) {
+      setStatus('Crop ignoré : image entièrement transparente.');
+      hideProgress();
+      processing = false;
+      return;
+    }
+
+    minX = Math.max(0, minX - 1);
+    minY = Math.max(0, minY - 1);
+    maxX = Math.min(width - 1, maxX + 1);
+    maxY = Math.min(height - 1, maxY + 1);
+
+    const newW = maxX - minX + 1;
+    const newH = maxY - minY + 1;
+
+    const outCanvas = document.createElement('canvas');
+    const outCtx = outCanvas.getContext('2d');
+    outCanvas.width = newW;
+    outCanvas.height = newH;
+    outCtx.drawImage(canvas, minX, minY, newW, newH, 0, 0, newW, newH);
+
+    const croppedBlob = await new Promise((resolve) =>
+      outCanvas.toBlob(resolve, 'image/png')
+    );
+
+    if (!croppedBlob) {
+      throw new Error('Export PNG échoué.');
+    }
+
+    setResult(croppedBlob);
+    setStatus('Crop terminé.');
+    setProgress(100, 'Crop terminé.');
+  } catch (err) {
+    console.error(err);
+    setStatus('Erreur: ' + (err.message || 'Crop impossible.'), true);
+    hideProgress();
+  } finally {
+    processing = false;
+  }
+}
+
+if (cropBtn) {
+  cropBtn.addEventListener('click', cropToOnePixelBorder);
+}
 
 // Drag & drop / click handlers
 ['dragenter', 'dragover'].forEach((evt) => {
@@ -152,9 +296,10 @@ fileInput.addEventListener('change', (e) => {
 
 function autoProcess() {
   if (!selectedFile || processing) return;
-  processBtn.click();
+  runProcess();
 }
 
 setStatus('pkimagetools — choisis une image (logo) pour détourage local.');
 if (versionLabel) versionLabel.textContent = VERSION;
+hideProgress();
 updateButtons();
