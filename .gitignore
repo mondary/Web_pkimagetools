@@ -1,7 +1,6 @@
--pk/
 .DS_Store
 
-.*
+-pk/
 node_modules/
 dist/
 build/
@@ -20,6 +19,8 @@ build/
 .venv/
 __pycache__/
 *.log
+.agent/
+.vscode/
 
 # Secrets / certs / keys
 *.pem
