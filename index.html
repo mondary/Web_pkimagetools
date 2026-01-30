@@ -3,65 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>pkimagetools — Détourage PNG transparent</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <title>ImgRalph — Détourage avec animation</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/ort.min.js"></script>
-  <script src="assets/index.umd.min.js"></script>
+  <script src="../assets/index.umd.min.js"></script>
 </head>
 <body>
-  <main class="app">
-    <header class="header">
-      <h1>pkimagetools</h1>
-      <p>Détourage rapide en navigateur. Optimisé pour logos.</p>
-    </header>
+  <div class="voile" id="voile">
+    <div class="voile-content">
+      <div class="voile-text">Déposez une image</div>
+    </div>
+  </div>
 
-    <section class="preview">
-      <div class="preview-col">
-        <h2>Image source</h2>
-        <div id="dropzone" class="dropzone checker" role="button" tabindex="0">
-          <div class="dropzone-inner">
-            <strong>Drag & drop</strong>
-            <span>ou clique pour choisir un fichier</span>
-            <span class="hint">PNG, JPG, WEBP</span>
-          </div>
-          <input id="fileInput" type="file" accept="image/*" hidden />
-        </div>
-        <div class="canvas checker" id="originalWrap" style="display:none">
-          <img id="originalImg" alt="Aperçu original" />
-        </div>
+  <!-- Fullscreen progress overlay -->
+  <div class="fullscreen-progress" id="fullscreenProgress">
+    <div class="fullscreen-progress-bar" id="fullscreenProgressBar"></div>
+    <div class="fullscreen-progress-content">
+      <div class="fullscreen-result">
+        <img id="fullscreenResultImg" alt="" />
       </div>
-      <div class="preview-col">
-        <h2>Résultat (transparent)</h2>
-        <div class="canvas checker" id="resultWrap">
-          <img id="resultImg" alt="Aperçu résultat" />
-        </div>
-        <div class="controls">
-          <label for="toleranceSlider">Tolérance transparence: <span id="toleranceValue">8</span></label>
-          <input id="toleranceSlider" type="range" min="0" max="255" value="8" />
-        </div>
-        <div class="actions">
-          <button id="downloadBtn" class="secondary" disabled>Télécharger PNG</button>
-        </div>
+      <div class="fullscreen-progress-percent" id="fullscreenProgressPercent" role="button" tabindex="0">0%</div>
+    </div>
+  </div>
+
+  <main class="app">
+    <section class="dropzone-area" id="dropzoneArea">
+      <div id="dropzone" class="dropzone" role="button" tabindex="0">
+        <span class="dropzone-text">Déposez une image</span>
+        <input id="fileInput" type="file" accept="image/*" hidden />
       </div>
     </section>
 
-    <div id="progress" class="progress" aria-hidden="true">
-      <div class="progress-track">
-        <div
-          id="progressBar"
-          class="progress-bar"
-          role="progressbar"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-valuenow="0"
-        ></div>
-      </div>
-      <div id="progressText" class="progress-text"></div>
-    </div>
-    <p id="status" class="status" aria-live="polite"></p>
-    <div class="version-badge">v<span id="versionLabel"></span></div>
   </main>
 
-  <script src="assets/app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
