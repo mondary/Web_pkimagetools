@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ImgRalph — Détourage avec animation</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/ort.min.js"></script>
+  <script src="../assets/index.umd.min.js"></script>
+</head>
+<body>
+  <div class="voile" id="voile">
+    <div class="voile-content">
+      <div class="voile-text">Déposez une image</div>
+    </div>
+  </div>
+
+  <main class="app">
+    <header class="header">
+      <h1>ImgRalph</h1>
+      <p>Glissez une image pour le détourage automatique</p>
+    </header>
+
+    <section class="dropzone-area">
+      <div id="dropzone" class="dropzone" role="button" tabindex="0">
+        <div class="dropzone-inner">
+          <svg class="dropzone-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="8" y="12" width="48" height="40" rx="4"/>
+            <circle cx="24" cy="28" r="6"/>
+            <path d="M8 44 l16-12 l12 8 l20-16"/>
+          </svg>
+          <strong>Glisser & déposer</strong>
+          <span>ou cliquez pour choisir</span>
+          <span class="hint">PNG, JPG, WEBP</span>
+        </div>
+        <input id="fileInput" type="file" accept="image/*" hidden />
+      </div>
+    </section>
+
+    <section class="preview-section" id="previewSection" style="display:none">
+      <div class="preview-container">
+        <div class="preview-col">
+          <h2>Original</h2>
+          <div class="canvas checker" id="originalWrap">
+            <img id="originalImg" alt="Image originale" />
+          </div>
+        </div>
+        <div class="preview-col">
+          <h2>Résultat</h2>
+          <div class="canvas checker" id="resultWrap">
+            <img id="resultImg" alt="Image détourée" />
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="downloadBtn" class="btn-download" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Télécharger PNG
+        </button>
+        <button id="resetBtn" class="btn-reset">Nouvelle image</button>
+      </div>
+    </section>
+
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-track">
+        <div id="progressBar" class="progress-bar" role="progressbar"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        </div>
+      </div>
+      <div class="progress-info">
+        <span id="progressText" class="progress-text">En attente...</span>
+        <span id="progressPercent" class="progress-percent">0%</span>
+      </div>
+    </div>
+
+    <p id="status" class="status" aria-live="polite"></p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
