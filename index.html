@@ -15,22 +15,18 @@
       <p>Détourage rapide en navigateur. Optimisé pour logos.</p>
     </header>
 
-    <section class="panel">
-      <div id="dropzone" class="dropzone" role="button" tabindex="0">
-        <div class="dropzone-inner">
-          <strong>Drag & drop</strong>
-          <span>ou clique pour choisir un fichier</span>
-          <span class="hint">PNG, JPG, WEBP</span>
-        </div>
-        <input id="fileInput" type="file" accept="image/*" hidden />
-      </div>
-
-    </section>
-
     <section class="preview">
       <div class="preview-col">
-        <h2>Original</h2>
-        <div class="canvas checker" id="originalWrap">
+        <h2>Image source</h2>
+        <div id="dropzone" class="dropzone checker" role="button" tabindex="0">
+          <div class="dropzone-inner">
+            <strong>Drag & drop</strong>
+            <span>ou clique pour choisir un fichier</span>
+            <span class="hint">PNG, JPG, WEBP</span>
+          </div>
+          <input id="fileInput" type="file" accept="image/*" hidden />
+        </div>
+        <div class="canvas checker" id="originalWrap" style="display:none">
           <img id="originalImg" alt="Aperçu original" />
         </div>
       </div>
@@ -39,8 +35,11 @@
         <div class="canvas checker" id="resultWrap">
           <img id="resultImg" alt="Aperçu résultat" />
         </div>
+        <div class="controls">
+          <label for="toleranceSlider">Tolérance transparence: <span id="toleranceValue">8</span></label>
+          <input id="toleranceSlider" type="range" min="0" max="255" value="8" />
+        </div>
         <div class="actions">
-          <button id="cropBtn" class="secondary" disabled>Crop 1px</button>
           <button id="downloadBtn" class="secondary" disabled>Télécharger PNG</button>
         </div>
       </div>

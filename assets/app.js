@@ -3,20 +3,24 @@ const VERSION = '1.0.7';
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
 const downloadBtn = document.getElementById('downloadBtn');
-const cropBtn = document.getElementById('cropBtn');
 const originalImg = document.getElementById('originalImg');
+const originalWrap = document.getElementById('originalWrap');
 const resultImg = document.getElementById('resultImg');
 const statusEl = document.getElementById('status');
 const versionLabel = document.getElementById('versionLabel');
 const progressWrap = document.getElementById('progress');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
+const toleranceSlider = document.getElementById('toleranceSlider');
+const toleranceValue = document.getElementById('toleranceValue');
 
 let selectedFile = null;
 let resultBlob = null;
+let originalResultBlob = null;
 let resultUrl = null;
 let session = null;
 let processing = false;
+let CROP_ALPHA_THRESHOLD = 8;
 
 function setStatus(msg, isError = false) {
   statusEl.textContent = msg;
@@ -53,7 +57,6 @@ function hideProgress() {
 }
 
 function updateButtons() {
-  if (cropBtn) cropBtn.disabled = !resultBlob;
   downloadBtn.disabled = !resultBlob;
 }
 
@@ -77,6 +80,10 @@ function handleFile(file) {
   setStatus('Image chargée. Préparation du détourage...');
   setProgress(null, 'Préparation…');
   updateButtons();
+  
+  dropzone.style.display = 'none';
+  originalWrap.style.display = 'grid';
+  
   autoProcess();
 }
 
@@ -133,8 +140,8 @@ async function runProcess() {
     });
 
     setResult(result);
-    setStatus('Détourage terminé.');
-    setProgress(100, '');
+    
+    await cropToOnePixelBorder(true);
   } catch (err) {
     console.error(err);
     setStatus(
@@ -177,11 +184,10 @@ async function loadImageFromBlob(blob) {
 
 const CROP_ALPHA_THRESHOLD = 8;
 
-async function cropToOnePixelBorder() {
-  if (!resultBlob || processing) return;
-  processing = true;
-  setStatus('Crop en cours...');
-  setProgress(null, 'Analyse des bords...');
+async function cropToOnePixelBorder(skipProcessingCheck = false) {
+  if (!resultBlob) return;
+  if (!skipProcessingCheck && processing) return;
+  if (!skipProcessingCheck) processing = true;
 
   try {
     const img = await loadImageFromBlob(resultBlob);
@@ -216,7 +222,7 @@ async function cropToOnePixelBorder() {
     if (maxX < 0 || maxY < 0) {
       setStatus('Crop ignoré : image entièrement transparente.');
       hideProgress();
-      processing = false;
+      if (!skipProcessingCheck) processing = false;
       return;
     }
 
@@ -243,43 +249,49 @@ async function cropToOnePixelBorder() {
     }
 
     setResult(croppedBlob);
-    setStatus('Crop terminé.');
-    setProgress(100, 'Crop terminé.');
+    setStatus('Terminé !');
+    setProgress(100, '');
   } catch (err) {
     console.error(err);
     setStatus('Erreur: ' + (err.message || 'Crop impossible.'), true);
     hideProgress();
   } finally {
-    processing = false;
+    if (!skipProcessingCheck) processing = false;
   }
 }
 
-if (cropBtn) {
-  cropBtn.addEventListener('click', cropToOnePixelBorder);
+function resetDropzone() {
+  dropzone.style.display = 'grid';
+  originalWrap.style.display = 'none';
+  resultImg.src = '';
+  selectedFile = null;
+  resultBlob = null;
+  updateButtons();
 }
 
-// Drag & drop / click handlers
+// Global drag & drop handlers
 ['dragenter', 'dragover'].forEach((evt) => {
-  dropzone.addEventListener(evt, (e) => {
+  document.body.addEventListener(evt, (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dropzone.classList.add('dragover');
+    document.body.classList.add('dragover');
   });
 });
 
 ['dragleave', 'drop'].forEach((evt) => {
-  dropzone.addEventListener(evt, (e) => {
+  document.body.addEventListener(evt, (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dropzone.classList.remove('dragover');
+    document.body.classList.remove('dragover');
   });
 });
 
-dropzone.addEventListener('drop', (e) => {
+document.body.addEventListener('drop', (e) => {
   const file = e.dataTransfer.files && e.dataTransfer.files[0];
   handleFile(file);
 });
 
+// Dropzone click and keyboard handlers
 dropzone.addEventListener('click', () => fileInput.click());
 
 dropzone.addEventListener('keydown', (e) => {
@@ -287,6 +299,12 @@ dropzone.addEventListener('keydown', (e) => {
     e.preventDefault();
     fileInput.click();
   }
+});
+
+// Allow clicking on original image to reset and load new file
+originalWrap.addEventListener('click', () => {
+  resetDropzone();
+  fileInput.click();
 });
 
 fileInput.addEventListener('change', (e) => {
