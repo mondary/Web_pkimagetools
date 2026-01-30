@@ -16,6 +16,11 @@ const progressText = document.getElementById('progressText');
 const progressPercent = document.getElementById('progressPercent');
 const statusEl = document.getElementById('status');
 
+// Fullscreen progress elements
+const fullscreenProgress = document.getElementById('fullscreenProgress');
+const fullscreenProgressBar = document.getElementById('fullscreenProgressBar');
+const fullscreenProgressPercent = document.getElementById('fullscreenProgressPercent');
+
 let selectedFile = null;
 let resultBlob = null;
 let resultUrl = null;
@@ -32,16 +37,25 @@ function setProgress(value, text) {
   progressContainer.classList.add('active');
   progressContainer.classList.remove('indeterminate');
 
+  // Show fullscreen progress
+  fullscreenProgress.classList.add('active');
+
   if (value === null || typeof value === 'undefined') {
     progressContainer.classList.add('indeterminate');
     progressBar.style.width = '30%';
     progressBar.setAttribute('aria-valuenow', '0');
     progressPercent.textContent = '...';
+    // Fullscreen: show 0% when indeterminate
+    fullscreenProgressBar.style.width = '0%';
+    fullscreenProgressPercent.textContent = '0%';
   } else {
     const pct = Math.max(0, Math.min(100, Math.round(value)));
     progressBar.style.width = `${pct}%`;
     progressBar.setAttribute('aria-valuenow', String(pct));
     progressPercent.textContent = `${pct}%`;
+    // Fullscreen progress update
+    fullscreenProgressBar.style.width = `${pct}%`;
+    fullscreenProgressPercent.textContent = `${pct}%`;
   }
 
   progressText.textContent = text || '';
@@ -53,6 +67,10 @@ function hideProgress() {
   progressBar.setAttribute('aria-valuenow', '0');
   progressPercent.textContent = '0%';
   progressText.textContent = 'En attente...';
+  // Hide fullscreen progress
+  fullscreenProgress.classList.remove('active');
+  fullscreenProgressBar.style.width = '0%';
+  fullscreenProgressPercent.textContent = '0%';
 }
 
 function updateButtons() {
