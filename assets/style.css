@@ -16,6 +16,13 @@ body {
   background: radial-gradient(circle at 10% 10%, #fff7e1, transparent 50%),
               radial-gradient(circle at 90% 20%, #e7f7f1, transparent 45%),
               var(--bg);
+  transition: background 0.3s ease;
+}
+
+body.dragover {
+  background: radial-gradient(circle at 10% 10%, #fff7e1, transparent 50%),
+              radial-gradient(circle at 90% 20%, #c5f5eb, transparent 45%),
+              #e0f5f0;
 }
 
 .app {
@@ -77,11 +84,59 @@ body {
   text-align: center;
   cursor: pointer;
   transition: 0.2s ease;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .dropzone.dragover {
   border-color: var(--accent);
   background: #e9f6f2;
+}
+
+.dropzone.checker {
+  background-image:
+    linear-gradient(45deg, #e9e6df 25%, transparent 25%),
+    linear-gradient(-45deg, #e9e6df 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e9e6df 75%),
+    linear-gradient(-45deg, transparent 75%, #e9e6df 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+}
+
+.dropzone-inner {
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropzone.pulse {
+  animation: pulse 0.4s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(13, 109, 95, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 15px rgba(13, 109, 95, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(13, 109, 95, 0);
+  }
 }
 
 .dropzone-inner {
@@ -103,6 +158,25 @@ body {
   display: flex;
   gap: 10px;
   margin-top: 12px;
+}
+
+.controls {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+.controls label {
+  display: block;
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.controls input[type="range"] {
+  width: 100%;
+  cursor: pointer;
 }
 
 button {
