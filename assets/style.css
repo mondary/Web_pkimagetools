@@ -25,6 +25,34 @@ body.dragover {
               #e0f5f0;
 }
 
+body.dragover .dropzone {
+  border-color: var(--accent);
+  background: #e9f6f2;
+  transform: scale(1.02);
+}
+
+body.new-file-drop {
+  animation: flashGreen 0.5s ease;
+}
+
+@keyframes flashGreen {
+  0% {
+    background: radial-gradient(circle at 10% 10%, #fff7e1, transparent 50%),
+                radial-gradient(circle at 90% 20%, #e7f7f1, transparent 45%),
+                var(--bg);
+  }
+  50% {
+    background: radial-gradient(circle at 10% 10%, #fff7e1, transparent 50%),
+                radial-gradient(circle at 90% 20%, #c5f5eb, transparent 45%),
+                #d0f5eb;
+  }
+  100% {
+    background: radial-gradient(circle at 10% 10%, #fff7e1, transparent 50%),
+                radial-gradient(circle at 90% 20%, #e7f7f1, transparent 45%),
+                var(--bg);
+  }
+}
+
 .app {
   max-width: 980px;
   margin: 40px auto 64px;

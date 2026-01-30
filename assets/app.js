@@ -61,6 +61,7 @@ function updateButtons() {
 }
 
 function setResult(blob) {
+  originalResultBlob = blob;
   resultBlob = blob;
   if (resultUrl) URL.revokeObjectURL(resultUrl);
   resultUrl = URL.createObjectURL(blob);
@@ -75,6 +76,7 @@ function handleFile(file) {
   }
   selectedFile = file;
   resultBlob = null;
+  originalResultBlob = null;
   resultImg.src = '';
   originalImg.src = URL.createObjectURL(file);
   setStatus('Image chargée. Préparation du détourage...');
@@ -83,6 +85,14 @@ function handleFile(file) {
   
   dropzone.style.display = 'none';
   originalWrap.style.display = 'grid';
+  
+  originalWrap.classList.remove('pulse');
+  void originalWrap.offsetWidth;
+  originalWrap.classList.add('pulse');
+  
+  document.body.classList.remove('new-file-drop');
+  void document.body.offsetWidth;
+  document.body.classList.add('new-file-drop');
   
   autoProcess();
 }
@@ -185,12 +195,16 @@ async function loadImageFromBlob(blob) {
 const CROP_ALPHA_THRESHOLD = 8;
 
 async function cropToOnePixelBorder(skipProcessingCheck = false) {
-  if (!resultBlob) return;
+  if (!originalResultBlob) return;
   if (!skipProcessingCheck && processing) return;
-  if (!skipProcessingCheck) processing = true;
+  if (!skipProcessingCheck) {
+    processing = true;
+    setStatus('Crop en cours...');
+    setProgress(null, 'Analyse...');
+  }
 
   try {
-    const img = await loadImageFromBlob(resultBlob);
+    const img = await loadImageFromBlob(originalResultBlob);
     const width = img.naturalWidth || img.width;
     const height = img.naturalHeight || img.height;
 
@@ -248,9 +262,16 @@ async function cropToOnePixelBorder(skipProcessingCheck = false) {
       throw new Error('Export PNG échoué.');
     }
 
-    setResult(croppedBlob);
-    setStatus('Terminé !');
-    setProgress(100, '');
+    resultBlob = croppedBlob;
+    if (resultUrl) URL.revokeObjectURL(resultUrl);
+    resultUrl = URL.createObjectURL(croppedBlob);
+    resultImg.src = resultUrl;
+    updateButtons();
+    
+    if (!skipProcessingCheck) {
+      setStatus('Terminé !');
+      setProgress(100, '');
+    }
   } catch (err) {
     console.error(err);
     setStatus('Erreur: ' + (err.message || 'Crop impossible.'), true);
@@ -266,6 +287,10 @@ function resetDropzone() {
   resultImg.src = '';
   selectedFile = null;
   resultBlob = null;
+  originalResultBlob = null;
+  CROP_ALPHA_THRESHOLD = 8;
+  toleranceSlider.value = 8;
+  toleranceValue.textContent = '8';
   updateButtons();
 }
 
@@ -310,6 +335,23 @@ originalWrap.addEventListener('click', () => {
 fileInput.addEventListener('change', (e) => {
   const file = e.target.files && e.target.files[0];
   handleFile(file);
+});
+
+toleranceSlider.addEventListener('input', (e) => {
+  const value = parseInt(e.target.value);
+  toleranceValue.textContent = value;
+  CROP_ALPHA_THRESHOLD = value;
+  if (originalResultBlob && !processing) {
+    cropToOnePixelBorder(false);
+  }
+});
+
+toleranceSlider.addEventListener('change', (e) => {
+  const value = parseInt(e.target.value);
+  CROP_ALPHA_THRESHOLD = value;
+  if (originalResultBlob && !processing) {
+    cropToOnePixelBorder(false);
+  }
 });
 
 function autoProcess() {
