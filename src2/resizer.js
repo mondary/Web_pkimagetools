@@ -8,9 +8,6 @@ const presets = [
 
 const els = {
   file: document.getElementById('file'),
-  fileDrop: document.getElementById('fileDrop'),
-  fileName: document.getElementById('fileName'),
-  fileBrowse: document.getElementById('fileBrowse'),
   fileNamePreview: document.getElementById('fileNamePreview'),
   fileBrowsePreview: document.getElementById('fileBrowsePreview'),
   presets: document.getElementById('presets'),
@@ -142,8 +139,7 @@ function draw() {
 function onFile(e) {
   const file = e.target.files?.[0];
   if (!file) return;
-  els.fileName.textContent = file.name;
-  els.fileNamePreview.textContent = file.name;
+  if (els.fileNamePreview) els.fileNamePreview.textContent = file.name;
   const url = URL.createObjectURL(file);
   const image = new Image();
   image.onload = () => {
@@ -233,11 +229,13 @@ function init() {
   els.fitH.addEventListener('click', fitHeight);
   els.center.addEventListener('click', centerView);
   els.magnet.addEventListener('change', (e) => { magnet = e.target.checked; });
-  if (els.fileBrowse) els.fileBrowse.addEventListener('click', () => els.file.click());
   els.fileBrowsePreview.addEventListener('click', () => els.file.click());
-  els.fileDrop.addEventListener('dragover', onDragOver);
-  els.fileDrop.addEventListener('dragleave', onDragLeave);
-  els.fileDrop.addEventListener('drop', onDrop);
+  if (els.previewEmpty) {
+    els.previewEmpty.addEventListener('dragover', onDragOver);
+    els.previewEmpty.addEventListener('dragleave', onDragLeave);
+    els.previewEmpty.addEventListener('drop', onDrop);
+    els.previewEmpty.addEventListener('click', () => els.file.click());
+  }
 
   els.canvasWrap.addEventListener('dragover', onDragOver);
   els.canvasWrap.addEventListener('dragleave', onDragLeave);
@@ -261,18 +259,18 @@ function onDropFile(file) {
 function onDragOver(e) {
   e.preventDefault();
   els.canvasWrap.classList.add('dragover');
-  els.fileDrop.classList.add('dragover');
+  if (els.previewEmpty) els.previewEmpty.classList.add('dragover');
 }
 
 function onDragLeave() {
   els.canvasWrap.classList.remove('dragover');
-  els.fileDrop.classList.remove('dragover');
+  if (els.previewEmpty) els.previewEmpty.classList.remove('dragover');
 }
 
 function onDrop(e) {
   e.preventDefault();
   els.canvasWrap.classList.remove('dragover');
-  els.fileDrop.classList.remove('dragover');
+  if (els.previewEmpty) els.previewEmpty.classList.remove('dragover');
   const file = e.dataTransfer?.files?.[0];
   onDropFile(file);
 }
