@@ -49,10 +49,10 @@ main {
 }
 
 .file-drop {
-  border: 2px dashed var(--border);
+  border: 2px dashed #7cb68b;
   border-radius: 14px;
   padding: 16px;
-  background: #fffaf2;
+  background: #f7fff8;
   display: grid;
   gap: 8px;
   justify-items: center;
@@ -60,7 +60,7 @@ main {
   color: #444;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
-.file-drop.dragover { border-color: var(--accent); background: #f5fdf9; }
+.file-drop.dragover { border-color: #7cb68b; background: #f0fff3; }
 .file-drop button { width: auto; }
 .file-name { font-size: 12px; color: #666; }
 
