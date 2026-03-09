@@ -2,6 +2,14 @@
 
 Ce dossier regroupe les livrables à fournir à la fiche du Chrome Web Store. Aucune image n’est générée automatiquement : remplis les placeholders avec tes propres visuels, puis exporte aux dimensions imposées.
 
+## Outil de redimensionnement/crop
+Ouvre `src2/resizer.html` (via `python3 -m http.server 4174 -d src2`) :
+- Charge ton visuel source
+- Choisis un preset (128×128, 1280×800, 640×400, 440×280, 1400×560)
+- Zoom/molette et drag pour positionner
+- Choisis la couleur de fond (pas d’alpha pour le Chrome Web Store)
+- Export PNG ou JPEG directement aux bonnes dimensions
+
 ## À produire (minimum)
 - `icon-128.png` — 128×128 (PNG 24 bits, sans alpha si possible)
 - `screenshot-1.png` — 1280×800 (ou 640×400) — PNG/JPEG 24 bits, pas d’alpha
@@ -40,4 +48,3 @@ Site officiel: mondary.design
 python3 -m http.server 4174 -d src2
 # Ouvre http://localhost:4174/templates/promo.html et prends une capture.
 ```
-
