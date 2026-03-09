@@ -11,6 +11,8 @@ const els = {
   fileDrop: document.getElementById('fileDrop'),
   fileName: document.getElementById('fileName'),
   fileBrowse: document.getElementById('fileBrowse'),
+  fileNamePreview: document.getElementById('fileNamePreview'),
+  fileBrowsePreview: document.getElementById('fileBrowsePreview'),
   presets: document.getElementById('presets'),
   zoom: document.getElementById('zoom'),
   zoomLabel: document.getElementById('zoomLabel'),
@@ -26,6 +28,7 @@ const els = {
   dropHint: document.getElementById('dropHint'),
   canvasWrap: document.querySelector('.canvas-wrap'),
   magnet: document.getElementById('magnet'),
+  previewEmpty: document.getElementById('previewEmpty'),
 };
 
 const ctx = els.canvas.getContext('2d');
@@ -123,7 +126,11 @@ function draw() {
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = els.bg.value || '#0b1220';
   ctx.fillRect(0, 0, w, h);
-  if (!img) return;
+  if (!img) {
+    els.previewEmpty.style.display = 'grid';
+    return;
+  }
+  els.previewEmpty.style.display = 'none';
   const s = scale;
   const dx = w / 2 + offsetX;
   const dy = h / 2 + offsetY;
@@ -136,6 +143,7 @@ function onFile(e) {
   const file = e.target.files?.[0];
   if (!file) return;
   els.fileName.textContent = file.name;
+  els.fileNamePreview.textContent = file.name;
   const url = URL.createObjectURL(file);
   const image = new Image();
   image.onload = () => {
@@ -226,6 +234,7 @@ function init() {
   els.center.addEventListener('click', centerView);
   els.magnet.addEventListener('change', (e) => { magnet = e.target.checked; });
   els.fileBrowse.addEventListener('click', () => els.file.click());
+  els.fileBrowsePreview.addEventListener('click', () => els.file.click());
   els.fileDrop.addEventListener('dragover', onDragOver);
   els.fileDrop.addEventListener('dragleave', onDragLeave);
   els.fileDrop.addEventListener('drop', onDrop);

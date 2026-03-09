@@ -118,6 +118,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 canvas { background: transparent; max-width: 100%; max-height: 100%; }
 
+.preview-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 10px;
+  border: 2px dashed #7cb68b;
+  border-radius: 14px;
+  background: rgba(247,255,248,0.8);
+  color: #3a4a3d;
+  pointer-events: all;
+}
+.preview-empty button { justify-content: center; }
+.preview-empty .file-name { color: #556; }
+
 .drop-hint {
   position: absolute;
   inset: 0;
