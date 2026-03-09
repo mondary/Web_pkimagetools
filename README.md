@@ -14,7 +14,7 @@
 - Variante avec curseur de tolérance alpha (`/imgralph/`)
 
 ## 🧠 Utilisation
-1. Lancer un serveur statique local (ex. `python3 -m http.server 4173`).
+1. Lancer un serveur statique local (ex. `python3 -m http.server 4173 -d src`).
 2. Ouvrir `http://localhost:4173/index.html` (ou `imgralph/index.html` pour la variante tolérance).
 3. Déposer une image ou cliquer sur la zone pour choisir un fichier.
 4. Attendre 100 % puis cliquer sur « Télécharger » pour récupérer le PNG détouré.

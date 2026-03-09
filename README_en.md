@@ -14,7 +14,7 @@
 - Tolerance slider variant (`/imgralph/`)
 
 ## 🧠 Usage
-1. Start a static server (e.g., `python3 -m http.server 4173`).
+1. Start a static server (e.g., `python3 -m http.server 4173 -d src`).
 2. Open `http://localhost:4173/index.html` (or `imgralph/index.html` for the tolerance variant).
 3. Drop an image or click the zone to choose a file.
 4. Wait for 100 %, then click “Télécharger” to save the cutout PNG.
