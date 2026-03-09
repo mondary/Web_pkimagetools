@@ -60,6 +60,9 @@ button {
   background: #f9f6ef;
   color: var(--ink);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 button.primary { background: var(--accent); color: #fff; border: none; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
