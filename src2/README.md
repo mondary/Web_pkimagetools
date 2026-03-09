@@ -3,7 +3,7 @@
 Ce dossier regroupe les livrables à fournir à la fiche du Chrome Web Store. Aucune image n’est générée automatiquement : remplis les placeholders avec tes propres visuels, puis exporte aux dimensions imposées.
 
 ## Outil de redimensionnement/crop
-Ouvre `src2/resizer.html` (via `python3 -m http.server 4174 -d src2`) :
+Ouvre `src2/resizer.html` (ex. `php -S 0.0.0.0:4174 -t src2`) :
 - Charge ton visuel source
 - Choisis un preset (128×128, 1280×800, 640×400, 440×280, 1400×560)
 - Zoom/molette et drag pour positionner
@@ -45,6 +45,6 @@ Site officiel: mondary.design
 
 ## Commandes utiles
 ```bash
-python3 -m http.server 4174 -d src2
-# Ouvre http://localhost:4174/templates/promo.html et prends une capture.
+php -S 0.0.0.0:4174 -t src2
+# Ouvre http://localhost:4174/resizer.html ou templates/promo.html
 ```
