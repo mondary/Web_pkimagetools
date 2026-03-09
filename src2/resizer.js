@@ -233,7 +233,7 @@ function init() {
   els.fitH.addEventListener('click', fitHeight);
   els.center.addEventListener('click', centerView);
   els.magnet.addEventListener('change', (e) => { magnet = e.target.checked; });
-  els.fileBrowse.addEventListener('click', () => els.file.click());
+  if (els.fileBrowse) els.fileBrowse.addEventListener('click', () => els.file.click());
   els.fileBrowsePreview.addEventListener('click', () => els.file.click());
   els.fileDrop.addEventListener('dragover', onDragOver);
   els.fileDrop.addEventListener('dragleave', onDragLeave);
