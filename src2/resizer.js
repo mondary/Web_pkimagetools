@@ -8,6 +8,9 @@ const presets = [
 
 const els = {
   file: document.getElementById('file'),
+  fileDrop: document.getElementById('fileDrop'),
+  fileName: document.getElementById('fileName'),
+  fileBrowse: document.getElementById('fileBrowse'),
   presets: document.getElementById('presets'),
   zoom: document.getElementById('zoom'),
   zoomLabel: document.getElementById('zoomLabel'),
@@ -132,6 +135,7 @@ function draw() {
 function onFile(e) {
   const file = e.target.files?.[0];
   if (!file) return;
+  els.fileName.textContent = file.name;
   const url = URL.createObjectURL(file);
   const image = new Image();
   image.onload = () => {
@@ -221,6 +225,10 @@ function init() {
   els.fitH.addEventListener('click', fitHeight);
   els.center.addEventListener('click', centerView);
   els.magnet.addEventListener('change', (e) => { magnet = e.target.checked; });
+  els.fileBrowse.addEventListener('click', () => els.file.click());
+  els.fileDrop.addEventListener('dragover', onDragOver);
+  els.fileDrop.addEventListener('dragleave', onDragLeave);
+  els.fileDrop.addEventListener('drop', onDrop);
 
   els.canvasWrap.addEventListener('dragover', onDragOver);
   els.canvasWrap.addEventListener('dragleave', onDragLeave);
@@ -244,15 +252,18 @@ function onDropFile(file) {
 function onDragOver(e) {
   e.preventDefault();
   els.canvasWrap.classList.add('dragover');
+  els.fileDrop.classList.add('dragover');
 }
 
 function onDragLeave() {
   els.canvasWrap.classList.remove('dragover');
+  els.fileDrop.classList.remove('dragover');
 }
 
 function onDrop(e) {
   e.preventDefault();
   els.canvasWrap.classList.remove('dragover');
+  els.fileDrop.classList.remove('dragover');
   const file = e.dataTransfer?.files?.[0];
   onDropFile(file);
 }

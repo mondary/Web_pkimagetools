@@ -13,10 +13,13 @@
   </header>
   <main>
     <section class="panel">
-      <label>
-        <span>Image source</span>
-        <input id="file" type="file" accept="image/*" />
-      </label>
+      <div class="file-drop" id="fileDrop">
+        <div>Image source</div>
+        <div class="file-name" id="fileName">Aucun fichier choisi</div>
+        <button type="button" id="fileBrowse" class="primary">📂 Choisir un fichier</button>
+        <input id="file" type="file" accept="image/*" hidden />
+        <div class="hint">Glissez-déposez une image ou cliquez</div>
+      </div>
       <div>
         <span class="hint">Formats Chrome Web Store (clique pour activer)</span>
         <div id="presets" class="presets"></div>

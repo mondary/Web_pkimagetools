@@ -48,6 +48,22 @@ main {
   box-shadow: 0 12px 30px rgba(0,0,0,0.06);
 }
 
+.file-drop {
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fffaf2;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+  color: #444;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.file-drop.dragover { border-color: var(--accent); background: #f5fdf9; }
+.file-drop button { width: auto; }
+.file-name { font-size: 12px; color: #666; }
+
 label span { display: block; font-size: 13px; color: #444; margin-bottom: 6px; }
 input, select, button { font: inherit; }
 input[type="color"], input[type="file"] { width: 100%; }
