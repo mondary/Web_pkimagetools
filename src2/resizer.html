@@ -24,6 +24,11 @@
       <div>
         <span class="hint">Taille cible: <strong id="sizeLabel"></strong></span>
       </div>
+      <div class="row">
+        <button id="fitW">Fit largeur</button>
+        <button id="fitH">Fit hauteur</button>
+        <button id="center">Centrer</button>
+      </div>
       <label>
         <span>Zoom</span>
         <input id="zoom" type="range" min="0.2" max="3" step="0.01" value="1" />
@@ -32,6 +37,10 @@
       <label>
         <span>Couleur de fond (pas d'alpha sur PNG/JPEG Chrome Store)</span>
         <input id="bg" type="color" value="#0b1220" />
+      </label>
+      <label class="row" style="align-items:center; gap:8px;">
+        <input id="magnet" type="checkbox" />
+        <span class="hint">Magnétisme centre (snap si proche)</span>
       </label>
       <div class="row">
         <button id="reset">Réinitialiser vue</button>

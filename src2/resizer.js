@@ -15,10 +15,14 @@ const els = {
   downloadPng: document.getElementById('downloadPng'),
   downloadJpg: document.getElementById('downloadJpg'),
   reset: document.getElementById('reset'),
+  fitW: document.getElementById('fitW'),
+  fitH: document.getElementById('fitH'),
+  center: document.getElementById('center'),
   canvas: document.getElementById('canvas'),
   sizeLabel: document.getElementById('sizeLabel'),
   dropHint: document.getElementById('dropHint'),
   canvasWrap: document.querySelector('.canvas-wrap'),
+  magnet: document.getElementById('magnet'),
 };
 
 const ctx = els.canvas.getContext('2d');
@@ -32,6 +36,7 @@ let offsetY = 0;
 let dragging = false;
 let lastX = 0;
 let lastY = 0;
+let magnet = false;
 
 function loadPresets() {
   presets.forEach((p, idx) => {
@@ -74,6 +79,37 @@ function fitImage() {
   scale = baseScale;
   els.zoom.value = 1;
   els.zoomLabel.textContent = '1.00×';
+  offsetX = 0;
+  offsetY = 0;
+  draw();
+}
+
+function fitWidth() {
+  if (!img) return;
+  const { w } = currentPreset();
+  baseScale = w / imgW;
+  scale = baseScale;
+  els.zoom.value = 1;
+  els.zoomLabel.textContent = '1.00×';
+  offsetX = 0;
+  offsetY = 0;
+  draw();
+}
+
+function fitHeight() {
+  if (!img) return;
+  const { h } = currentPreset();
+  baseScale = h / imgH;
+  scale = baseScale;
+  els.zoom.value = 1;
+  els.zoomLabel.textContent = '1.00×';
+  offsetX = 0;
+  offsetY = 0;
+  draw();
+}
+
+function centerView() {
+  if (!img) return;
   offsetX = 0;
   offsetY = 0;
   draw();
@@ -140,6 +176,11 @@ function drag(e) {
 
 function stopDrag() {
   dragging = false;
+  if (magnet) {
+    if (Math.abs(offsetX) < 12) offsetX = 0;
+    if (Math.abs(offsetY) < 12) offsetY = 0;
+    draw();
+  }
 }
 
 function wheelZoom(e) {
@@ -176,6 +217,10 @@ function init() {
   els.downloadPng.addEventListener('click', () => download(false));
   els.downloadJpg.addEventListener('click', () => download(true));
   els.reset.addEventListener('click', resetView);
+  els.fitW.addEventListener('click', fitWidth);
+  els.fitH.addEventListener('click', fitHeight);
+  els.center.addEventListener('click', centerView);
+  els.magnet.addEventListener('change', (e) => { magnet = e.target.checked; });
 
   els.canvasWrap.addEventListener('dragover', onDragOver);
   els.canvasWrap.addEventListener('dragleave', onDragLeave);
