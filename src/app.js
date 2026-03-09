@@ -8,6 +8,7 @@ const dropzoneArea = document.getElementById('dropzoneArea');
 const fileInput = document.getElementById('fileInput');
 const fullscreenResultImg = document.getElementById('fullscreenResultImg');
 const statusEl = document.getElementById('status');
+const toleranceRange = document.getElementById('toleranceRange');
 
 // Fullscreen progress elements
 const fullscreenProgress = document.getElementById('fullscreenProgress');
@@ -22,9 +23,11 @@ let pendingResultUrl = null;
 
 let selectedFile = null;
 let resultBlob = null;
+let baseResultBlob = null;
 let resultUrl = null;
 let session = null;
 let processing = false;
+let cropAlphaThreshold = 8;
 
 // --- Status & Progress ---
 function setStatus(msg, isError = false) {
@@ -188,6 +191,7 @@ function handleFile(file) {
 
   selectedFile = file;
   resultBlob = null;
+  baseResultBlob = null;
   resultReady = false;
   pendingResultUrl = null;
   if (resultUrl) {
@@ -258,9 +262,9 @@ async function runProcess() {
     });
 
     setProgress(85, 'Détourage terminé, crop...');
+    baseResultBlob = result;
     await setResult(result);
 
-    // Crop to content
     await cropToContent();
   } catch (err) {
     console.error(err);
@@ -299,12 +303,13 @@ async function loadImageFromBlob(blob) {
 }
 
 async function cropToContent() {
-  if (!resultBlob) return;
+  const sourceBlob = baseResultBlob || resultBlob;
+  if (!sourceBlob) return;
 
   setProgress(90, 'Recadrage...');
 
   try {
-    const img = await loadImageFromBlob(resultBlob);
+    const img = await loadImageFromBlob(sourceBlob);
     const width = img.naturalWidth || img.width;
     const height = img.naturalHeight || img.height;
 
@@ -314,7 +319,8 @@ async function cropToContent() {
     canvas.height = height;
     ctx.drawImage(img, 0, 0);
 
-    const { data } = ctx.getImageData(0, 0, width, height);
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const { data } = imageData;
     let minX = width;
     let minY = height;
     let maxX = -1;
@@ -324,14 +330,19 @@ async function cropToContent() {
       const rowOffset = y * width * 4;
       for (let x = 0; x < width; x++) {
         const alpha = data[rowOffset + x * 4 + 3];
-        if (alpha > CROP_ALPHA_THRESHOLD) {
+        if (alpha > cropAlphaThreshold) {
           if (x < minX) minX = x;
           if (y < minY) minY = y;
           if (x > maxX) maxX = x;
           if (y > maxY) maxY = y;
         }
+        if (alpha < cropAlphaThreshold) {
+          data[rowOffset + x * 4 + 3] = 0;
+        }
       }
     }
+
+    ctx.putImageData(imageData, 0, 0);
 
     setProgress(95, 'Finalisation...');
 
@@ -376,6 +387,17 @@ async function cropToContent() {
 function autoProcess() {
   if (!selectedFile || processing) return;
   runProcess();
+}
+
+if (toleranceRange) {
+  toleranceRange.value = String(cropAlphaThreshold);
+  toleranceRange.addEventListener('input', (e) => {
+    const value = Number(e.target.value);
+    if (!Number.isFinite(value)) return;
+    cropAlphaThreshold = Math.max(0, Math.min(255, value));
+    if (processing || !baseResultBlob) return;
+    cropToContent();
+  });
 }
 
 // --- Init ---
