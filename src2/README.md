@@ -4,11 +4,16 @@ Ce dossier regroupe les livrables à fournir à la fiche du Chrome Web Store. Au
 
 ## Outil de redimensionnement/crop
 Ouvre `src2/resizer.html` (ex. `php -S 0.0.0.0:4174 -t src2`) :
-- Charge ton visuel source
-- Choisis un preset (128×128, 1280×800, 640×400, 440×280, 1400×560)
-- Zoom/molette et drag pour positionner
-- Choisis la couleur de fond (pas d’alpha pour le Chrome Web Store)
-- Export PNG ou JPEG directement aux bonnes dimensions
+- Charge un visuel source
+- Clique sur un format (5 boutons fixes, aucun menu) :
+  - Icône magasin 128×128
+  - Capture locale 1280×800
+  - Capture internationale 1280×800
+  - Petite promo 440×280
+  - Grande promo 1400×560
+- Molette pour zoom, drag pour recadrer
+- Choisis la couleur de fond (pas d’alpha)
+- Export PNG ou JPEG aux dimensions exactes
 
 ## À produire (minimum)
 - `icon-128.png` — 128×128 (PNG 24 bits, sans alpha si possible)

@@ -1,14 +1,14 @@
 const presets = [
-  { id: 'icon-128', label: 'Icon 128×128', w: 128, h: 128, filename: 'icon-128.png' },
-  { id: 'screenshot-1280x800', label: 'Screenshot 1280×800', w: 1280, h: 800, filename: 'screenshot-1280x800.png' },
-  { id: 'screenshot-640x400', label: 'Screenshot 640×400', w: 640, h: 400, filename: 'screenshot-640x400.png' },
-  { id: 'promo-440x280', label: 'Promo 440×280', w: 440, h: 280, filename: 'promo-440x280.png' },
-  { id: 'promo-1400x560', label: 'Promo 1400×560', w: 1400, h: 560, filename: 'promo-1400x560.png' },
+  { id: 'icon-128', label: 'Icône magasin', detail: '128 × 128', w: 128, h: 128, filename: 'icon-128.png' },
+  { id: 'screenshot-local-1280x800', label: 'Capture locale', detail: '1280 × 800', w: 1280, h: 800, filename: 'screenshot-1280x800.png' },
+  { id: 'screenshot-intl-1280x800', label: 'Capture internationale', detail: '1280 × 800', w: 1280, h: 800, filename: 'screenshot-intl-1280x800.png' },
+  { id: 'promo-440x280', label: 'Petite promo', detail: '440 × 280', w: 440, h: 280, filename: 'promo-440x280.png' },
+  { id: 'promo-1400x560', label: 'Grande promo', detail: '1400 × 560', w: 1400, h: 560, filename: 'promo-1400x560.png' },
 ];
 
 const els = {
   file: document.getElementById('file'),
-  preset: document.getElementById('preset'),
+  presets: document.getElementById('presets'),
   zoom: document.getElementById('zoom'),
   zoomLabel: document.getElementById('zoomLabel'),
   bg: document.getElementById('bg'),
@@ -32,18 +32,29 @@ let lastX = 0;
 let lastY = 0;
 
 function loadPresets() {
-  presets.forEach((p) => {
-    const opt = document.createElement('option');
-    opt.value = p.id;
-    opt.textContent = `${p.label}`;
-    els.preset.appendChild(opt);
+  presets.forEach((p, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'preset-btn' + (idx === 0 ? ' active' : '');
+    btn.dataset.id = p.id;
+    btn.innerHTML = `<span>${p.label}</span><span class="preset-meta">${p.detail}</span>`;
+    btn.addEventListener('click', () => selectPreset(p.id));
+    els.presets.appendChild(btn);
   });
-  els.preset.value = presets[0].id;
-  updateCanvasSize();
+  selectPreset(presets[0].id);
 }
 
 function currentPreset() {
-  return presets.find((p) => p.id === els.preset.value) || presets[0];
+  return presets.find((p) => p.id === els.presets.dataset.active) || presets[0];
+}
+
+function selectPreset(id) {
+  els.presets.dataset.active = id;
+  Array.from(els.presets.querySelectorAll('.preset-btn')).forEach((b) => {
+    b.classList.toggle('active', b.dataset.id === id);
+  });
+  updateCanvasSize();
+  fitImage();
 }
 
 function updateCanvasSize() {
@@ -98,11 +109,6 @@ function onFile(e) {
 
 function setControlsEnabled(enabled) {
   [els.zoom, els.bg, els.downloadPng, els.downloadJpg, els.reset].forEach((el) => (el.disabled = !enabled));
-}
-
-function onPresetChange() {
-  updateCanvasSize();
-  fitImage();
 }
 
 function onZoomChange() {
@@ -163,7 +169,6 @@ function init() {
   loadPresets();
   setControlsEnabled(false);
   els.file.addEventListener('change', onFile);
-  els.preset.addEventListener('change', onPresetChange);
   els.zoom.addEventListener('input', onZoomChange);
   els.bg.addEventListener('input', draw);
   els.downloadPng.addEventListener('click', () => download(false));
