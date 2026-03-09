@@ -17,6 +17,8 @@ const els = {
   reset: document.getElementById('reset'),
   canvas: document.getElementById('canvas'),
   sizeLabel: document.getElementById('sizeLabel'),
+  dropHint: document.getElementById('dropHint'),
+  canvasWrap: document.querySelector('.canvas-wrap'),
 };
 
 const ctx = els.canvas.getContext('2d');
@@ -175,6 +177,10 @@ function init() {
   els.downloadJpg.addEventListener('click', () => download(true));
   els.reset.addEventListener('click', resetView);
 
+  els.canvasWrap.addEventListener('dragover', onDragOver);
+  els.canvasWrap.addEventListener('dragleave', onDragLeave);
+  els.canvasWrap.addEventListener('drop', onDrop);
+
   els.canvas.addEventListener('mousedown', startDrag);
   window.addEventListener('mousemove', drag);
   window.addEventListener('mouseup', stopDrag);
@@ -182,3 +188,26 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+function onDropFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const dt = new DataTransfer();
+  dt.items.add(file);
+  els.file.files = dt.files;
+  onFile({ target: els.file });
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  els.canvasWrap.classList.add('dragover');
+}
+
+function onDragLeave() {
+  els.canvasWrap.classList.remove('dragover');
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  els.canvasWrap.classList.remove('dragover');
+  const file = e.dataTransfer?.files?.[0];
+  onDropFile(file);
+}
