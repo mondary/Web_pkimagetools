@@ -59,6 +59,8 @@ main {
   text-align: center;
   color: #444;
   transition: border-color 0.2s ease, background 0.2s ease;
+  min-height: 180px;
+  place-content: center;
 }
 .file-drop.dragover { border-color: #7cb68b; background: #f0fff3; }
 .file-drop button { width: auto; }
