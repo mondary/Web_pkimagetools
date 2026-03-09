@@ -104,10 +104,31 @@
   max-height: 100%;
 }
 
+.tol-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.tol-control input[type="range"] {
+  width: 220px;
+  accent-color: var(--progress-green);
+}
+
 
 @media (max-width: 680px) {
   .fullscreen-progress-percent {
     font-size: 3.2rem;
+  }
+
+  .tol-control input[type="range"] {
+    width: 160px;
   }
 
   .fullscreen-result {

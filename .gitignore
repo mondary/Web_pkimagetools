@@ -20,7 +20,10 @@ build/
 __pycache__/
 *.log
 .agent/
+.skills/
+.ralph/
 .vscode/
+imgralph/
 
 # Secrets / certs / keys
 *.pem
