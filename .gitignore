@@ -20,7 +20,8 @@ build/
 __pycache__/
 *.log
 .agent/
-.skills/
+/.skills
+/.skills/
 .ralph/
 .vscode/
 imgralph/
