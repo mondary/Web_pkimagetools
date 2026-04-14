@@ -18,8 +18,10 @@ function loadConfig(): array {
     // Local dev + recommended: keep secrets at repo root (`./secrets`) next to `src/`.
     dirname(__DIR__, 2) . '/secrets/removebg.php',
     // OVH layout: secrets folder next to `www/` (FTP root), while app lives in `www/.../pkremovebg`.
-    // Example: .../www/pk/pkremovebg/src/lib -> go up 5 levels to FTP root -> /secrets/removebg.php
+    // Example A: .../www/pk/pkremovebg/src/lib -> go up 5 levels to FTP root -> /secrets/removebg.php
     dirname(__DIR__, 5) . '/secrets/removebg.php',
+    // Example B: .../www/pk/pkremovebg/lib (no /src) -> go up 4 levels to FTP root -> /secrets/removebg.php
+    dirname(__DIR__, 4) . '/secrets/removebg.php',
   ];
   foreach ($candidates as $configPath) {
     if (is_file($configPath)) {
@@ -47,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $cfg = loadConfig();
 $apiKey = $cfg['api_key'] ?? $cfg['REMOVEBG_API_KEY'] ?? getenv('REMOVEBG_API_KEY') ?: '';
 if (!is_string($apiKey) || $apiKey === '') {
-  jsonError(500, 'Server missing remove.bg api key (set secrets/removebg.php, src/backend/config.php, or REMOVEBG_API_KEY env var).');
+  jsonError(500, 'Server missing remove.bg api key (set /secrets/removebg.php on FTP root, or lib/config.php, or REMOVEBG_API_KEY env var).');
 }
 
 if (!isset($_FILES['image']) || !is_array($_FILES['image'])) {
