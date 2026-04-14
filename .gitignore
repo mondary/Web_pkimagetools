@@ -1,4 +1,9 @@
 .DS_Store
+backend/config.php
+# Secrets (keep folder itself committed for .htaccess/README, ignore only secret payloads)
+secrets/*.php
+secrets/*.env
+secrets/*.json
 
 -pk/
 node_modules/

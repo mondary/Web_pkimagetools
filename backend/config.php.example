@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copy this file to `backend/config.php` and fill in your secrets.
+ * Never commit `backend/config.php`.
+ */
+return [
+  // Create your key on https://www.remove.bg/api
+  'REMOVEBG_API_KEY' => 'YOUR_REMOVEBG_API_KEY_HERE',
+];
+

@@ -9,6 +9,10 @@ const fileInput = document.getElementById('fileInput');
 const fullscreenResultImg = document.getElementById('fullscreenResultImg');
 const statusEl = document.getElementById('status');
 const toleranceRange = document.getElementById('toleranceRange');
+const toleranceValue = document.getElementById('toleranceValue');
+const downloadControls = document.getElementById('downloadControls');
+const modelSelect = document.getElementById('modelSelect');
+const engineSelect = document.getElementById('engineSelect');
 
 // Fullscreen progress elements
 const fullscreenProgress = document.getElementById('fullscreenProgress');
@@ -23,11 +27,13 @@ let pendingResultUrl = null;
 
 let selectedFile = null;
 let resultBlob = null;
-let baseResultBlob = null;
+let modelResultBlob = null;
 let resultUrl = null;
-let session = null;
+const sessionsByModel = new Map();
+let currentEngine = 'api'; // 'api' | 'local'
+let currentModel = 'u2net';
 let processing = false;
-let cropAlphaThreshold = 8;
+let matteControl = 80; // -50..200 (positive = keep more)
 
 // --- Status & Progress ---
 function setStatus(msg, isError = false) {
@@ -67,6 +73,7 @@ function setProgress(value, text) {
         const pct = Math.max(0, Math.min(100, Math.round(displayedProgress)));
         fullscreenProgressBar.style.width = `${pct}%`;
         fullscreenProgressPercent.textContent = pct >= 100 ? 'Télécharger' : `${pct}%`;
+        if (downloadControls) downloadControls.hidden = !(pct >= 100 && resultReady);
         if (pct >= 100 && resultReady && pendingResultUrl) {
           fullscreenResultImg.src = pendingResultUrl;
         }
@@ -92,6 +99,7 @@ function hideProgress() {
     cancelAnimationFrame(progressRaf);
     progressRaf = null;
   }
+  if (downloadControls) downloadControls.hidden = true;
 }
 
 // --- Voile (veil) animation for drag ---
@@ -206,9 +214,16 @@ function handleFile(file) {
   autoProcess();
 }
 
-// --- rembg-web Session ---
-async function ensureSession() {
-  if (session) return;
+// --- rembg-web Sessions ---
+function getSelectedModel() {
+  const value = modelSelect?.value;
+  if (value === 'u2netp' || value === 'u2net' || value === 'u2net_human_seg') return value;
+  return 'u2net';
+}
+
+async function ensureSession(modelName) {
+  const existing = sessionsByModel.get(modelName);
+  if (existing) return existing;
 
   if (!window.RembgWeb) {
     setStatus('Librairie rembg-web non chargée.', true);
@@ -224,16 +239,27 @@ async function ensureSession() {
   ort.env.wasm.proxy = false;
 
   const { newSession, rembgConfig } = window.RembgWeb;
-  rembgConfig.setCustomModelPath(
-    'u2netp',
-    'https://huggingface.co/tomjackson2023/rembg/resolve/main/u2netp.onnx?download=true'
-  );
 
-  session = await newSession('u2netp', {
+  // Use explicit URLs so models load reliably from the same repo.
+  // Note: larger models (u2net / u2net_human_seg) can take longer to download.
+  const modelUrls = {
+    u2net: 'https://huggingface.co/tomjackson2023/rembg/resolve/main/u2net.onnx?download=true',
+    u2netp: 'https://huggingface.co/tomjackson2023/rembg/resolve/main/u2netp.onnx?download=true',
+    u2net_human_seg:
+      'https://huggingface.co/tomjackson2023/rembg/resolve/main/u2net_human_seg.onnx?download=true',
+  };
+
+  const url = modelUrls[modelName];
+  if (!url) throw new Error(`Modèle inconnu: ${modelName}`);
+  rembgConfig.setCustomModelPath(modelName, url);
+
+  const newSess = await newSession(modelName, {
     numThreads: 1,
     proxy: false,
     simd: true,
   });
+  sessionsByModel.set(modelName, newSess);
+  return newSess;
 }
 
 // --- Processing ---
@@ -242,37 +268,78 @@ async function runProcess() {
 
   processing = true;
   setStatus('Traitement en cours...');
-  setProgress(null, 'Initialisation du modèle...');
+  setProgress(null, currentEngine === 'api' ? 'Upload vers remove.bg...' : 'Initialisation du modèle...');
 
   try {
-    await ensureSession();
-    setProgress(5, 'Modèle prêt, détourage...');
+    let result;
+    if (currentEngine === 'api') {
+      setProgress(10, 'Upload vers remove.bg...');
+      result = await removeViaApi(selectedFile);
+      setProgress(85, 'Résultat reçu, crop...');
+    } else {
+      currentModel = getSelectedModel();
+      const session = await ensureSession(currentModel);
+      setProgress(5, 'Modèle prêt, détourage...');
 
-    const result = await window.RembgWeb.remove(selectedFile, {
-      session,
-      onProgress: (p) => {
-        // p is 0-1, map to 5-85 for détourage phase
-        const pct = Math.round(5 + p * 80);
-        if (!Number.isFinite(pct)) {
-          setProgress(null, 'Détourage en cours...');
-          return;
-        }
-        setProgress(pct, 'Détourage...');
-      },
-    });
+      result = await window.RembgWeb.remove(selectedFile, {
+        session,
+        onProgress: (p) => {
+          // p is 0-1, map to 5-85 for détourage phase
+          const pct = Math.round(5 + p * 80);
+          if (!Number.isFinite(pct)) {
+            setProgress(null, 'Détourage en cours...');
+            return;
+          }
+          setProgress(pct, 'Détourage...');
+        },
+      });
+    }
 
-    setProgress(85, 'Détourage terminé, crop...');
-    baseResultBlob = result;
-    await setResult(result);
-
-    await cropToContent();
+    modelResultBlob = result;
+    await applyMatteAndCrop();
   } catch (err) {
     console.error(err);
-    setStatus('Erreur: ' + (err.message || 'Impossible de détourer.'), true);
+    const message = err && typeof err.message === 'string' ? err.message : 'Impossible de détourer.';
+    setStatus('Erreur: ' + message, true);
     hideProgress();
   } finally {
     processing = false;
   }
+}
+
+async function removeViaApi(file) {
+  const form = new FormData();
+  form.append('image', file, file.name || 'image');
+
+  const res = await fetch('../backend/removebg.php', {
+    method: 'POST',
+    body: form,
+  });
+
+  if (!res.ok) {
+    let details = '';
+    try {
+      const json = await res.json();
+      details = json?.error ? json.error : '';
+    } catch {
+      // ignore
+    }
+    const hint =
+      res.status === 500 && /api key/i.test(details)
+        ? 'Vérifie `secrets/removebg.php` (api_key) sur le serveur.'
+        : res.status === 402 || /insufficient|credits|payment|required/i.test(details)
+          ? 'Quota/crédits remove.bg épuisés.'
+          : '';
+    throw new Error(
+      `remove.bg API: HTTP ${res.status}${details ? ` — ${details}` : ''}${hint ? ` — ${hint}` : ''}`
+    );
+  }
+
+  const blob = await res.blob();
+  if (!blob || blob.size === 0) {
+    throw new Error('remove.bg API returned empty response');
+  }
+  return blob;
 }
 
 function setResult(blob) {
@@ -283,8 +350,9 @@ function setResult(blob) {
   resultReady = true;
 }
 
-// --- Crop to content with 1px border ---
-const CROP_ALPHA_THRESHOLD = 8;
+function clampByte(value) {
+  return Math.max(0, Math.min(255, value));
+}
 
 async function loadImageFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -302,8 +370,72 @@ async function loadImageFromBlob(blob) {
   });
 }
 
-async function cropToContent() {
-  const sourceBlob = baseResultBlob || resultBlob;
+function applyMatteToImageData(imageData, control) {
+  const { data, width, height } = imageData;
+
+  // Gamma curve on alpha.
+  // control > 0 => gamma < 1 => boosts semi-transparent pixels (keeps more)
+  // control < 0 => gamma > 1 => makes edges thinner (more aggressive)
+  const tRaw = Number(control) || 0;
+  const t = Math.max(-50, Math.min(200, tRaw));
+
+  // Make the top of the slider much stronger without being too jumpy near 0.
+  const keepStrength = t > 0 ? Math.pow(t / 200, 0.55) : 0; // 0..1
+  const cutStrength = t < 0 ? Math.pow(Math.abs(t) / 50, 0.85) : 0; // 0..1
+
+  const gamma = t >= 0
+    ? Math.max(0.12, 1 - keepStrength * 0.92) // 1 -> ~0.08..0.12
+    : Math.min(2.8, 1 + cutStrength * 1.8); // 1 -> up to ~2.8
+
+  for (let i = 3; i < data.length; i += 4) {
+    const a = data[i] / 255;
+    const next = Math.pow(a, gamma) * 255;
+    data[i] = clampByte(Math.round(next));
+  }
+
+  // Light dilation when control is positive.
+  // radius 0..6, but only kicks in progressively (so it's still stable near 0).
+  const radius = t > 0 ? Math.min(6, Math.floor(keepStrength * 6)) : 0;
+  if (radius <= 0) return imageData;
+
+  const alpha = new Uint8ClampedArray(width * height);
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      alpha[y * width + x] = data[(y * width + x) * 4 + 3];
+    }
+  }
+
+  const out = new Uint8ClampedArray(width * height);
+  const r = radius;
+  for (let y = 0; y < height; y++) {
+    const y0 = Math.max(0, y - r);
+    const y1 = Math.min(height - 1, y + r);
+    for (let x = 0; x < width; x++) {
+      const x0 = Math.max(0, x - r);
+      const x1 = Math.min(width - 1, x + r);
+      let m = 0;
+      for (let yy = y0; yy <= y1; yy++) {
+        const row = yy * width;
+        for (let xx = x0; xx <= x1; xx++) {
+          const v = alpha[row + xx];
+          if (v > m) m = v;
+        }
+      }
+      out[y * width + x] = m;
+    }
+  }
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      data[(y * width + x) * 4 + 3] = out[y * width + x];
+    }
+  }
+
+  return imageData;
+}
+
+async function applyMatteAndCrop() {
+  const sourceBlob = modelResultBlob || resultBlob;
   if (!sourceBlob) return;
 
   setProgress(90, 'Recadrage...');
@@ -319,25 +451,25 @@ async function cropToContent() {
     canvas.height = height;
     ctx.drawImage(img, 0, 0);
 
-    const imageData = ctx.getImageData(0, 0, width, height);
+    let imageData = ctx.getImageData(0, 0, width, height);
+    imageData = applyMatteToImageData(imageData, matteControl);
     const { data } = imageData;
     let minX = width;
     let minY = height;
     let maxX = -1;
     let maxY = -1;
 
+    const boundsThreshold = 1;
+
     for (let y = 0; y < height; y++) {
       const rowOffset = y * width * 4;
       for (let x = 0; x < width; x++) {
         const alpha = data[rowOffset + x * 4 + 3];
-        if (alpha > cropAlphaThreshold) {
+        if (alpha > boundsThreshold) {
           if (x < minX) minX = x;
           if (y < minY) minY = y;
           if (x > maxX) maxX = x;
           if (y > maxY) maxY = y;
-        }
-        if (alpha < cropAlphaThreshold) {
-          data[rowOffset + x * 4 + 3] = 0;
         }
       }
     }
@@ -390,13 +522,49 @@ function autoProcess() {
 }
 
 if (toleranceRange) {
-  toleranceRange.value = String(cropAlphaThreshold);
+  toleranceRange.value = String(matteControl);
+  if (toleranceValue) toleranceValue.textContent = String(matteControl);
   toleranceRange.addEventListener('input', (e) => {
     const value = Number(e.target.value);
     if (!Number.isFinite(value)) return;
-    cropAlphaThreshold = Math.max(0, Math.min(255, value));
-    if (processing || !baseResultBlob) return;
-    cropToContent();
+    matteControl = Math.max(-50, Math.min(200, value));
+    if (toleranceValue) toleranceValue.textContent = String(matteControl);
+    if (processing || !modelResultBlob) return;
+    applyMatteAndCrop();
+  });
+}
+
+if (modelSelect) {
+  modelSelect.value = currentModel;
+  modelSelect.addEventListener('change', () => {
+    if (processing) return;
+    currentModel = getSelectedModel();
+    // Re-run the model on the original file when the user switches model.
+    // This is the "other tool" part; matte slider alone won't fix model misses.
+    if (!selectedFile) return;
+    modelResultBlob = null;
+    runProcess();
+  });
+}
+
+function applyEngineUiState() {
+  if (modelSelect) {
+    const modelLabel = modelSelect.closest('label');
+    if (modelLabel) modelLabel.style.display = currentEngine === 'local' ? '' : 'none';
+  }
+}
+
+if (engineSelect) {
+  engineSelect.value = currentEngine;
+  applyEngineUiState();
+  engineSelect.addEventListener('change', () => {
+    if (processing) return;
+    const value = engineSelect.value;
+    currentEngine = value === 'local' ? 'local' : 'api';
+    applyEngineUiState();
+    if (!selectedFile) return;
+    modelResultBlob = null;
+    runProcess();
   });
 }
 

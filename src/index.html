@@ -16,17 +16,38 @@
   </div>
 
   <!-- Fullscreen progress overlay -->
-  <div class="fullscreen-progress" id="fullscreenProgress">
-    <div class="fullscreen-progress-bar" id="fullscreenProgressBar"></div>
-    <div class="fullscreen-progress-content">
-      <div class="fullscreen-result">
-        <img id="fullscreenResultImg" alt="" />
+    <div class="fullscreen-progress" id="fullscreenProgress">
+      <div class="fullscreen-progress-bar" id="fullscreenProgressBar"></div>
+      <div class="fullscreen-progress-content">
+        <div class="fullscreen-result">
+          <img id="fullscreenResultImg" alt="" />
+        </div>
+        <div class="fullscreen-progress-percent" id="fullscreenProgressPercent" role="button" tabindex="0">0%</div>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <div class="download-controls" id="downloadControls" hidden>
+          <label class="tol-control" for="engineSelect">
+            <span class="tol-label">Source</span>
+            <select id="engineSelect">
+            <option value="api" selected>remove.bg (API)</option>
+            <option value="local">Local (navigateur)</option>
+          </select>
+          <span class="tol-value" aria-hidden="true"></span>
+        </label>
+        <label class="tol-control" for="modelSelect">
+          <span class="tol-label">Modèle</span>
+          <select id="modelSelect">
+            <option value="u2net" selected>u2net (qualité)</option>
+            <option value="u2netp">u2netp (rapide)</option>
+            <option value="u2net_human_seg">u2net_human_seg (humain)</option>
+          </select>
+          <span class="tol-value" aria-hidden="true"></span>
+        </label>
+        <label class="tol-control" for="toleranceRange">
+          <span class="tol-label">Détourage</span>
+          <input id="toleranceRange" type="range" min="-50" max="200" step="1" value="80" />
+          <span class="tol-value" id="toleranceValue" aria-hidden="true">80</span>
+        </label>
       </div>
-      <div class="fullscreen-progress-percent" id="fullscreenProgressPercent" role="button" tabindex="0">0%</div>
-      <label class="tol-control" for="toleranceRange" style="display:flex;gap:8px;align-items:center;color:#fff;font-weight:600;">
-        <span style="font-size:0.95rem;">Tolérance</span>
-        <input id="toleranceRange" type="range" min="0" max="255" step="5" value="8" />
-      </label>
     </div>
   </div>
 

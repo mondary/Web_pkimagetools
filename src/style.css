@@ -87,6 +87,52 @@
   padding: 24px;
 }
 
+.download-controls {
+  width: min(560px, 88vw);
+}
+
+.tol-control {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.tol-label {
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.tol-value {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.95;
+  min-width: 2ch;
+  text-align: right;
+}
+
+.tol-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--progress-green);
+}
+
+.tol-control select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-weight: 650;
+  outline: none;
+}
+
+.tol-control select:focus {
+  border-color: rgba(74, 222, 128, 0.7);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+}
+
 .fullscreen-result {
   width: min(85vw, 1000px);
   height: min(65vh, 680px);
@@ -102,6 +148,19 @@
 .fullscreen-result img {
   max-width: 100%;
   max-height: 100%;
+}
+
+.status {
+  width: min(820px, 92vw);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 650;
+  line-height: 1.35;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+.status.error {
+  color: #fecaca;
 }
 
 
