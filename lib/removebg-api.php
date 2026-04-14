@@ -13,7 +13,11 @@ while (ob_get_level() > 0) {
 function loadConfig(): array {
   $candidates = [
     __DIR__ . '/config.php',
+    // When deployed under repo root `/lib/`, secrets can live next to the site root.
     dirname(__DIR__) . '/secrets/removebg.php',
+    // OVH layout: secrets folder next to `www/` (FTP root), while app lives in `www/.../pkremovebg`.
+    // Example: .../www/pk/pkremovebg/lib -> go up 4 levels to FTP root -> /secrets/removebg.php
+    dirname(__DIR__, 4) . '/secrets/removebg.php',
   ];
   foreach ($candidates as $configPath) {
     if (is_file($configPath)) {
@@ -41,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $cfg = loadConfig();
 $apiKey = $cfg['api_key'] ?? $cfg['REMOVEBG_API_KEY'] ?? getenv('REMOVEBG_API_KEY') ?: '';
 if (!is_string($apiKey) || $apiKey === '') {
-  jsonError(500, 'Server missing remove.bg api key (set secrets/removebg.php, backend/config.php, or REMOVEBG_API_KEY env var).');
+  jsonError(500, 'Server missing remove.bg api key (set secrets/removebg.php, src/backend/config.php, or REMOVEBG_API_KEY env var).');
 }
 
 if (!isset($_FILES['image']) || !is_array($_FILES['image'])) {

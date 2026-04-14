@@ -1,5 +1,5 @@
 .DS_Store
-backend/config.php
+lib/config.php
 # Secrets (keep folder itself committed for .htaccess/README, ignore only secret payloads)
 secrets/*.php
 secrets/*.env
