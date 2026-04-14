@@ -200,7 +200,7 @@ function handleFile(file) {
 
   selectedFile = file;
   resultBlob = null;
-  baseResultBlob = null;
+  modelResultBlob = null;
   resultReady = false;
   pendingResultUrl = null;
   if (resultUrl) {
