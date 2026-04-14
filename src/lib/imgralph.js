@@ -1,6 +1,6 @@
 /**
  * ImgRalph - Détourage avec animation voile et barre de progression
- * Entry point loaded from `index.html` as an ES module.
+ * Entry point loaded from `src/index.html` as an ES module.
  */
 
 const voile = document.getElementById('voile');
@@ -312,7 +312,7 @@ async function removeViaApi(file) {
   const form = new FormData();
   form.append('image', file, file.name || 'image');
 
-  const res = await fetch('./removebg-api.php', {
+  const res = await fetch('./lib/removebg-api.php', {
     method: 'POST',
     body: form,
   });

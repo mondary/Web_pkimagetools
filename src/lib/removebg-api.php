@@ -13,11 +13,13 @@ while (ob_get_level() > 0) {
 function loadConfig(): array {
   $candidates = [
     __DIR__ . '/config.php',
-    // When deployed under repo root `/lib/`, secrets can live next to the site root.
+    // When deployed under `src/lib/`, secrets could live next to `src/`.
     dirname(__DIR__) . '/secrets/removebg.php',
+    // Local dev + recommended: keep secrets at repo root (`./secrets`) next to `src/`.
+    dirname(__DIR__, 2) . '/secrets/removebg.php',
     // OVH layout: secrets folder next to `www/` (FTP root), while app lives in `www/.../pkremovebg`.
-    // Example: .../www/pk/pkremovebg/lib -> go up 4 levels to FTP root -> /secrets/removebg.php
-    dirname(__DIR__, 4) . '/secrets/removebg.php',
+    // Example: .../www/pk/pkremovebg/src/lib -> go up 5 levels to FTP root -> /secrets/removebg.php
+    dirname(__DIR__, 5) . '/secrets/removebg.php',
   ];
   foreach ($candidates as $configPath) {
     if (is_file($configPath)) {
