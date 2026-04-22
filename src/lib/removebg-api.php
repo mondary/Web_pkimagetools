@@ -11,22 +11,36 @@ while (ob_get_level() > 0) {
 }
 
 function loadConfig(): array {
-  $candidates = [
-    __DIR__ . '/config.php',
-    // When deployed under `src/lib/`, secrets could live next to `src/`.
-    dirname(__DIR__) . '/secrets/removebg.php',
-    // Local dev + recommended: keep secrets at repo root (`./secrets`) next to `src/`.
-    dirname(__DIR__, 2) . '/secrets/removebg.php',
-    // OVH layout: secrets folder next to `www/` (FTP root), while app lives in `www/.../pkremovebg`.
-    // Example A: .../www/pk/pkremovebg/src/lib -> go up 5 levels to FTP root -> /secrets/removebg.php
-    dirname(__DIR__, 5) . '/secrets/removebg.php',
-    // Example B: .../www/pk/pkremovebg/lib (no /src) -> go up 4 levels to FTP root -> /secrets/removebg.php
-    dirname(__DIR__, 4) . '/secrets/removebg.php',
-  ];
+  $candidates = [__DIR__ . '/config.php'];
+
+  // Walk up parent dirs to support different hosting layouts (shared hosting/FTP roots).
+  $dir = __DIR__;
+  for ($i = 0; $i < 12; $i++) {
+    $candidates[] = $dir . '/secrets/removebg.php';
+    $candidates[] = $dir . '/lib/config.php';
+    $parent = dirname($dir);
+    if ($parent === $dir) break;
+    $dir = $parent;
+  }
+
+  // Add web-root based candidates when available.
+  $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
+  if (is_string($docRoot) && $docRoot !== '') {
+    $docRoot = rtrim($docRoot, '/\\');
+    $candidates[] = $docRoot . '/secrets/removebg.php';
+    $candidates[] = dirname($docRoot) . '/secrets/removebg.php';
+  }
+
+  $seen = [];
   foreach ($candidates as $configPath) {
-    if (is_file($configPath)) {
-      $cfg = require $configPath;
+    $real = realpath($configPath);
+    if ($real === false || isset($seen[$real]) || !is_file($real)) continue;
+    $seen[$real] = true;
+    try {
+      $cfg = require $real;
       if (is_array($cfg)) return $cfg;
+    } catch (Throwable $e) {
+      // Ignore broken candidate files and continue searching.
     }
   }
   return [];
@@ -49,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $cfg = loadConfig();
 $apiKey = $cfg['api_key'] ?? $cfg['REMOVEBG_API_KEY'] ?? getenv('REMOVEBG_API_KEY') ?: '';
 if (!is_string($apiKey) || $apiKey === '') {
-  jsonError(500, 'Server missing remove.bg api key (set /secrets/removebg.php on FTP root, or lib/config.php, or REMOVEBG_API_KEY env var).');
+  $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '(unknown)';
+  jsonError(500, 'Server missing remove.bg api key (expected in secrets/removebg.php, lib/config.php, or REMOVEBG_API_KEY env var). document_root=' . $docRoot . ', script_dir=' . __DIR__);
 }
 
 if (!isset($_FILES['image']) || !is_array($_FILES['image'])) {
