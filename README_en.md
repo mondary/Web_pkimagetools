@@ -2,39 +2,43 @@
 
 ![Project icon](icon.png)
 
-[🇬🇧 EN](README_en.md) · [🇫🇷 FR](README.md)
+[FR](README.md) · [EN](README_en.md)
 
-✨ In-browser background remover: runs ONNX + rembg-web locally, auto-crops with a 1 px border, and lets you download the transparent PNG instantly.
+PK · version **2026.10.01**
 
-## ✅ Features
-- Drag & drop or file picker (PNG/JPG/WEBP)
-- Local background removal via `@bunnio/rembg-web` + ONNX Runtime
-- Auto-crop to content with 1 px border
-- Fullscreen progress bar; one-click download
-- Tolerance slider variant (`/imgralph/`)
+Remove image backgrounds with remove.bg (API, default) or locally in your browser with ONNX and rembg-web. API mode sends the image to the external service.
 
-## 🧠 Usage
-1. Start a static server (e.g., `python3 -m http.server 4173 -d src`).
-2. Open `http://localhost:4173/index.html` (or `imgralph/index.html` for the tolerance variant).
-3. Drop an image or click the zone to choose a file.
-4. Wait for 100 %, then click “Télécharger” to save the cutout PNG.
+![ImgRalph](store/website/screenshots/01-app-empty-1440x900.png)
 
-## ⚙️ Settings
-- Tolerance variant: “Tolérance” slider (0‑255) controls the alpha threshold used during cropping.
+## Features
 
-## 🧾 Commands
-None: everything is in the UI.
+- Drag and drop or pick a PNG/JPG/WebP file.
+- Fullscreen progress and transparent PNG download.
+- Automatic cropping with a 1 px border.
+- Cutout slider from −50 to 200 and local models u2net, u2netp, u2net_human_seg.
 
-## 📦 Build & Package
-No build step: plain static HTML/CSS/JS.
+## Installation and usage
 
-## 🧪 Installation (Antigravity)
-- Needs network access to load `onnxruntime-web` and `@bunnio/rembg-web` from CDNs.
-- Works on modern browsers (Chrome/Edge/Firefox) with WebAssembly enabled.
+No build step. API mode requires PHP with cURL and a server-side key configured as described in [secrets/README.md](secrets/README.md).
 
-## 🧾 Changelog
-- 2.0.0 (2026-03-09): switched to `@bunnio/rembg-web` CDN, fullscreen progress, tolerance page.
-- 1.0.0: initial release (background removal + auto-crop).
+```sh
+php -S localhost:4173 -t src
+```
 
-## 🔗 Links
-- README FR: README.md
+Open http://localhost:4173, drop an image, then click “Télécharger” when processing finishes. Local mode downloads its dependencies and model; a modern browser with WebAssembly is required.
+
+To view the FR/EN promotional page:
+
+```sh
+python3 -m http.server 4174
+```
+
+Open http://localhost:4174/store/website/index.html. The previous version remains in `store/v1/`.
+
+## History
+
+See the [CHANGELOG](CHANGELOG.md).
+
+## Support
+
+Support this project on [Ko-fi](https://ko-fi.com/pouark).

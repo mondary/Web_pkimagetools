@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Carte Store 3</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; width: 1200px; height: 630px; overflow: hidden; font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif; color: #171715; background: #f4f0e8; }
+    main { position: relative; display: grid; grid-template-columns: 590px 1fr; height: 100%; padding: 62px; }
+    h1 { margin: 18px 0 0; font-size: 63px; line-height: 0.98; letter-spacing: -0.04em; }
+    p { margin: 20px 0 0; max-width: 470px; color: #61615b; font-size: 21px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; margin: 0; color: #0d6d5f; font-size: 14px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+    .eyebrow i { width: 10px; height: 10px; background: #0d6d5f; }
+    .stage { position: relative; border-left: 1px solid #d8d2c6; background: linear-gradient(45deg, #e9e6df 25%, transparent 25%), linear-gradient(-45deg, #e9e6df 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e9e6df 75%), linear-gradient(-45deg, transparent 75%, #e9e6df 75%); background-position: 0 0, 0 24px, 24px -24px, -24px 0; background-size: 48px 48px; }
+    .ui { position: absolute; inset: 18px; border: 4px dashed rgba(0, 0, 0, 0.16); }
+    img { position: absolute; right: 45px; bottom: -35px; width: 405px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div>
+      <p class="eyebrow"><i></i>ImgRalph</p>
+      <h1>Un dépôt.<br>Un sujet.<br>Un PNG.</h1>
+      <p>Détourage remove.bg ou local, recadrage automatique, export transparent.</p>
+    </div>
+    <div class="stage"><span class="ui"></span><img src="../assets/subject.png" alt="" /></div>
+  </main>
+</body>
+</html>

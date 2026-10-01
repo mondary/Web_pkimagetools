@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ImgRalph — Store 3</title>
+  <meta name="description" content="ImgRalph : déposez une image, la page devient la barre de progression, puis téléchargez le sujet en PNG transparent." />
+  <link rel="icon" href="./assets/icon.png" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <header class="topbar">
+    <a class="brand" href="./index.html">
+      <img src="./assets/icon.png" alt="" width="34" height="34" />
+      <span>ImgRalph</span>
+    </a>
+    <nav class="topnav" aria-label="Navigation">
+      <a href="#geste" data-i18n="nav.gesture">Le geste</a>
+      <a href="#reglages" data-i18n="nav.settings">Réglages</a>
+    </nav>
+    <div class="top-actions">
+      <div class="lang-switch" role="group" aria-label="Langue / Language">
+        <button type="button" data-set-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="open-tool" href="../../src/index.html" data-i18n="nav.open">Ouvrir l’outil</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero reveal">
+      <div class="hero-copy">
+        <p class="eyebrow"><span aria-hidden="true"></span><span data-i18n="hero.eyebrow">Store 3 · interface réelle</span></p>
+        <h1>
+          <span data-i18n="hero.title.a">Déposez l’image.</span>
+          <span data-i18n="hero.title.b">Gardez le sujet.</span>
+        </h1>
+        <p class="lede" data-i18n="hero.lede">ImgRalph ne vous installe pas dans un atelier compliqué. La page entière est la zone de dépôt, le traitement remplit l’écran, puis le bouton devient « Télécharger ».</p>
+        <div class="hero-actions">
+          <a class="primary" href="../../src/index.html" data-i18n="hero.open">Détourer une image</a>
+          <button class="ghost" type="button" data-replay data-i18n="hero.replay">Revoir le geste</button>
+        </div>
+        <p class="formats" data-i18n="hero.formats">PNG, JPG ou WebP en entrée · PNG transparent en sortie</p>
+      </div>
+
+      <figure class="hero-ui" aria-labelledby="hero-ui-caption">
+        <div class="production-frame">
+          <div class="real-dropzone" role="img" aria-label="Interface ImgRalph : cadre pointillé plein écran avec le texte Déposez une image">
+            <span>Déposez une image</span>
+          </div>
+        </div>
+        <figcaption id="hero-ui-caption" data-i18n="hero.caption">Interface de production — état initial. Cliquez n’importe où pour ouvrir le sélecteur de fichier.</figcaption>
+      </figure>
+    </section>
+
+    <section id="geste" class="sequence reveal" aria-labelledby="sequence-title">
+      <div class="section-head">
+        <p data-i18n="sequence.eyebrow">Preuve</p>
+        <h2 id="sequence-title" data-i18n="sequence.title">Trois écrans, un seul geste.</h2>
+      </div>
+      <div class="screens">
+        <figure>
+          <img src="./assets/app-drag-1440x900.webp" alt="Pendant le glisser-déposer, un voile vert plein écran affiche Déposez une image." width="1440" height="900" loading="lazy" decoding="async" />
+          <figcaption><strong>01</strong><span data-i18n="sequence.drag">Le drag recouvre toute la page.</span></figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/app-progress-1440x900.webp" alt="Traitement en cours : la barre verte remplit 68 pour cent de l’écran et le sujet apparaît au centre." width="1440" height="900" loading="lazy" decoding="async" />
+          <figcaption><strong>02</strong><span data-i18n="sequence.progress">La progression devient l’écran.</span></figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/app-result-1600x1000.webp" alt="Résultat terminé : sujet détouré au centre, bouton Télécharger et contrôles Source, Modèle et Détourage." width="1600" height="1000" loading="lazy" decoding="async" />
+          <figcaption><strong>03</strong><span data-i18n="sequence.result">À 100 %, le bouton télécharge.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="signature reveal" aria-labelledby="signature-title">
+      <div class="section-head">
+        <p data-i18n="signature.eyebrow">Scène</p>
+        <h2 id="signature-title" data-i18n="signature.title">La page devient la barre de progression.</h2>
+        <p class="lede" data-i18n="signature.lede">Cette scène reprend les couleurs, proportions et libellés de l’interface réelle. Elle est locale à la page promotionnelle : aucune image n’est envoyée pendant la visite.</p>
+      </div>
+
+      <div class="demo-shell" id="demoShell" data-state="idle">
+        <div class="demo-bar" id="demoBar"></div>
+        <div class="demo-content">
+          <div class="demo-result">
+            <img id="demoImage" src="./assets/subject.webp" alt="Sujet botanique détouré, sans arrière-plan." width="900" height="900" loading="lazy" decoding="async" />
+          </div>
+          <button class="demo-percent" id="demoPercent" type="button">0%</button>
+          <p class="demo-status" id="demoStatus" role="status">Image chargée. Lancement du détourage…</p>
+          <div class="download-controls" id="demoControls" hidden>
+            <label for="demoSource">Source</label>
+            <select id="demoSource">
+              <option selected>remove.bg (API)</option>
+              <option>Local (navigateur)</option>
+            </select>
+            <label for="demoModel">Modèle</label>
+            <select id="demoModel">
+              <option selected>u2net (qualité)</option>
+              <option>u2netp (rapide)</option>
+              <option>u2net_human_seg (humain)</option>
+            </select>
+            <label for="demoMatte">Détourage</label>
+            <input id="demoMatte" type="range" min="-50" max="200" step="1" value="80" />
+            <output id="demoMatteValue" for="demoMatte">80</output>
+          </div>
+        </div>
+      </div>
+      <div class="signature-actions">
+        <button type="button" class="ghost" data-replay data-i18n="signature.replay">Rejouer la progression</button>
+      </div>
+    </section>
+
+    <section id="reglages" class="facts reveal" aria-labelledby="facts-title">
+      <div class="section-head">
+        <p data-i18n="facts.eyebrow">Ce que l’app fait vraiment</p>
+        <h2 id="facts-title" data-i18n="facts.title">Deux sources, trois modèles, un PNG.</h2>
+      </div>
+      <dl>
+        <div>
+          <dt><span>01</span><span data-i18n="facts.source.title">Source</span></dt>
+          <dd data-i18n="facts.source.body">remove.bg via API, ou local dans le navigateur avec ONNX et rembg-web. En mode API, l’image est envoyée au service ; en mode local, dépendances et modèle sont téléchargés.</dd>
+        </div>
+        <div>
+          <dt><span>02</span><span data-i18n="facts.model.title">Modèle</span></dt>
+          <dd data-i18n="facts.model.body">u2net pour la qualité, u2netp pour la rapidité, u2net_human_seg pour les personnes. Le choix reste celui de l’interface réelle.</dd>
+        </div>
+        <div>
+          <dt><span>03</span><span data-i18n="facts.export.title">Détourage et export</span></dt>
+          <dd data-i18n="facts.export.body">Le curseur va de -50 à 200, le contenu est recadré automatiquement avec une bordure de 1 px, et l’export est un PNG transparent.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="final reveal">
+      <div class="subject-proof" aria-hidden="true">
+        <img src="./assets/subject.webp" alt="" width="900" height="900" loading="lazy" decoding="async" />
+      </div>
+      <h2 data-i18n="final.title">Le sujet. Et c’est tout.</h2>
+      <p data-i18n="final.body">Ouvrez l’outil, déposez une image et laissez ImgRalph faire le reste.</p>
+      <div class="final-actions">
+        <a class="primary" href="../../src/index.html" data-i18n="final.open">Ouvrir ImgRalph</a>
+        <a class="ghost" href="https://ko-fi.com/pouark" data-i18n="final.support">Soutenir sur Ko-fi</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p data-i18n="footer.note">Dossier Store 3 · captures et réplique générées depuis l’interface de production.</p>
+  </footer>
+
+  <script src="./store.js" defer></script>
+</body>
+</html>

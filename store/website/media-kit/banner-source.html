@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Bannière Store 3</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; width: 1544px; height: 500px; overflow: hidden; font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif; color: #171715; background: #f4f0e8; }
+    .wrap { position: relative; display: grid; grid-template-columns: 1fr 470px; align-items: center; height: 100%; padding: 62px 68px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; color: #0d6d5f; font-size: 15px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+    .eyebrow i { width: 11px; height: 11px; background: #0d6d5f; }
+    h1 { margin: 0; max-width: 730px; font-size: 73px; line-height: 0.96; letter-spacing: -0.045em; }
+    p { margin: 20px 0 0; max-width: 650px; color: #61615b; font-size: 22px; }
+    .proof { position: relative; height: 100%; border-left: 1px solid #d8d2c6; background: linear-gradient(45deg, #e9e6df 25%, transparent 25%), linear-gradient(-45deg, #e9e6df 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e9e6df 75%), linear-gradient(-45deg, transparent 75%, #e9e6df 75%); background-position: 0 0, 0 20px, 20px -20px, -20px 0; background-size: 40px 40px; }
+    img { position: absolute; right: 52px; bottom: -48px; width: 430px; }
+    .ui { position: absolute; inset: 18px; border: 4px dashed rgba(0, 0, 0, 0.16); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div>
+      <p class="eyebrow"><i></i>ImgRalph · Store 3</p>
+      <h1>Déposez l’image. Gardez le sujet.</h1>
+      <p>La page devient la barre de progression, puis le bouton devient « Télécharger ».</p>
+    </div>
+    <div class="proof"><span class="ui"></span><img src="../assets/subject.png" alt="" /></div>
+  </main>
+</body>
+</html>

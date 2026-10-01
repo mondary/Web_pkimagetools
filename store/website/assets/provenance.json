@@ -1,0 +1,30 @@
+{
+  "generatedOn": "2026-09-30",
+  "product": "ImgRalph",
+  "outputFolder": "store3/",
+  "subject": {
+    "files": ["subject.png", "subject.webp"],
+    "source": "Copied from store2/assets/botanical.png and botanical.webp; original generated illustration, already transparent.",
+    "sha256": {
+      "subject.png": "7944caf5e11feb39082f894241fe42cf191129ea4efed949439a8d5503a955d7",
+      "subject.webp": "43d2133776f1af113fbfb7f78bbd23c0d7df9f729f802662912d82c22755b785"
+    }
+  },
+  "interfaceCaptures": {
+    "source": "store3/media-kit/production-replica.html and production-replica.css, copied from the tokens, DOM structure and visible states of src/index.html and src/style.css.",
+    "states": ["empty", "drag veil", "68% processing with controls hidden", "100% result with controls visible"],
+    "fixture": "subject.png",
+    "limit": "No remove.bg call and no ONNX inference are run for the media kit; states are set to the same classes and values used by the production code."
+  },
+  "promotionAssets": {
+    "banner": "banner-1544x500.png",
+    "card": "card-1200x630.png",
+    "wideGif": "../gifs/demo-wide.gif",
+    "compactGif": "../gifs/demo-compact.gif",
+    "video": "../videos/demo.mp4"
+  },
+  "icon": {
+    "file": "icon.png",
+    "source": "Root project icon resized locally to 128×128 for the independent Store 3 page."
+  }
+}

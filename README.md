@@ -2,39 +2,43 @@
 
 ![Project icon](icon.png)
 
-[🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md)
+[FR](README.md) · [EN](README_en.md)
 
-✨ Détourage d'images local dans le navigateur : supprime l'arrière‑plan via ONNX + rembg‑web, recadre automatiquement avec bordure 1 px, et propose un téléchargement direct.
+PK · version **2026.10.01**
 
-## ✅ Fonctionnalités
-- Glisser‑déposer ou sélection de fichier (PNG/JPG/WEBP)
-- Détourage local via `@bunnio/rembg-web` + ONNX Runtime
-- Recadrage automatique au contenu (bordure 1 px)
-- Barre de progression plein écran, téléchargement en un clic
-- Variante avec curseur de tolérance alpha (`/imgralph/`)
+Détourage via remove.bg (API, par défaut) ou localement dans le navigateur avec ONNX et rembg-web. Le mode API transmet l’image au service externe.
 
-## 🧠 Utilisation
-1. Lancer un serveur statique local (ex. `python3 -m http.server 4173 -d src`).
-2. Ouvrir `http://localhost:4173/index.html` (ou `imgralph/index.html` pour la variante tolérance).
-3. Déposer une image ou cliquer sur la zone pour choisir un fichier.
-4. Attendre 100 % puis cliquer sur « Télécharger » pour récupérer le PNG détouré.
+![ImgRalph](store/website/screenshots/01-app-empty-1440x900.png)
 
-## ⚙️ Réglages
-- Variante tolérance : curseur « Tolérance » (0‑255) pour ajuster le seuil alpha du recadrage.
+## Fonctionnalités
 
-## 🧾 Commandes
-Aucune commande spécifique : tout se fait dans l'UI.
+- Glisser-déposer ou sélection de fichier PNG/JPG/WebP.
+- Progression plein écran et téléchargement du PNG transparent.
+- Recadrage automatique avec une bordure de 1 px.
+- Curseur de détourage de −50 à 200 et modèles locaux u2net, u2netp, u2net_human_seg.
 
-## 📦 Build & Package
-Aucune build : fichiers statiques (HTML/CSS/JS) servis tels quels.
+## Installation et utilisation
 
-## 🧪 Installation (Antigravity)
-- Dépendances : accès réseau pour charger `onnxruntime-web` et `@bunnio/rembg-web` depuis les CDN.
-- Compatible navigateurs modernes (Chrome/Edge/Firefox) avec WebAssembly.
+Aucune compilation. Pour le mode API, utiliser PHP avec cURL et configurer la clé côté serveur selon [secrets/README.md](secrets/README.md).
 
-## 🧾 Changelog
-- 2.0.0 (2026-03-09) : passage au CDN `@bunnio/rembg-web`, écran de progression plein écran, page tolérance.
-- 1.0.0 : version initiale (détourage + recadrage auto).
+```sh
+php -S localhost:4173 -t src
+```
 
-## 🔗 Liens
-- README EN : README_en.md
+Ouvrir http://localhost:4173, déposer une image, puis cliquer sur « Télécharger » à la fin du traitement. Le mode local télécharge ses dépendances et son modèle ; il nécessite un navigateur moderne avec WebAssembly.
+
+Pour consulter la page promotionnelle FR/EN :
+
+```sh
+python3 -m http.server 4174
+```
+
+Ouvrir http://localhost:4174/store/website/index.html. La version précédente reste dans `store/v1/`.
+
+## Historique
+
+Voir le [CHANGELOG](CHANGELOG.md).
+
+## Soutenir
+
+Soutenir ce projet sur [Ko-fi](https://ko-fi.com/pouark).

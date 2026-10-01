@@ -1,0 +1,21 @@
+{
+  "botanical": {
+    "source": "OpenAI built-in imagegen",
+    "kind": "Generated illustration, already transparent; not a product segmentation result",
+    "file": "botanical.png",
+    "sha256": "7944caf5e11feb39082f894241fe42cf191129ea4efed949439a8d5503a955d7",
+    "derivative": "botanical.webp — WebP quality 88, original alpha preserved",
+    "prompt": "Use case: product-mockup. Asset: isolated botanical cutout for a premium image-editing website hero. Create one high-end photorealistic studio photograph of a striking burnt-orange strelitzia bird-of-paradise flower arrangement, with two sculptural orange and blue flower heads, three large deep green glossy tropical leaves and graceful green stems standing in a small matte warm-white cylindrical ceramic vase. Full entire vase and leaves in frame with generous breathing room, centered composition, square image, realistic exquisite textures, sophisticated editorial still-life photography, soft directional daylight from top left, extremely crisp silhouette. Genuinely transparent background with alpha, no background scene, no ground plane, no cast shadow outside the object, no text, no logo, no border. The subject occupies about 80 percent of canvas height."
+  },
+  "mark": {
+    "source": "SVG authored for Store 2",
+    "file": "mark.svg"
+  },
+  "backgrounds": {
+    "source": "CSS colors and transparency checker; no external wallpaper"
+  },
+  "screenshots": {
+    "landing": "Actual Store 2 page",
+    "production": "Actual src HTML/CSS/JS with a deterministic, generated 480×480 PNG replacing inference; no remove.bg or ONNX request. See media-kit/production-sources.json."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "Actual app HTML/CSS/JS; RembgWeb and ort adapter only. Production crop and matte run unchanged. No inference or API validation.",
+  "sources": {
+    "src/index.html": "42da0bf23a759600ca343b32c8d2dec7cdfaf9744153e2fce7c0c8176ac507db",
+    "src/style.css": "bd2daa20d8d3140bf21f6a2487d854d813319fb38802e8a0130b9a56d735ce5e",
+    "src/lib/imgralph.js": "b3a5a9f5be37420961c9c85895e83e2dc677e678d6131b266ece53317b7b6f62"
+  }
+}

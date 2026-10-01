@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-30",
+  "renderer": "Ego Browser / Chromium",
+  "page": "store3/index.html",
+  "languages": {
+    "defaultRule": "navigator.language, fallback fr",
+    "manualPriority": true,
+    "storageUnavailable": "in-memory choice remains active",
+    "keyboardSwitchToEn": {
+      "lang": "en",
+      "title": "Drop the image. Keep the subject.",
+      "overflow": false
+    },
+    "noJs": {
+      "title": "Déposez l’image. Gardez le sujet.",
+      "visibleSections": 5
+    }
+  },
+  "viewports": [
+    { "width": 390, "height": 844, "scrollWidth": 390, "overflow": false },
+    { "width": 768, "height": 1024, "scrollWidth": 768, "overflow": false },
+    { "width": 1440, "height": 900, "scrollWidth": 1440, "overflow": false },
+    { "width": 1920, "height": 900, "scrollWidth": 1920, "overflow": false }
+  ],
+  "motion": {
+    "prefersReducedMotion": "captured; animation jumps to completed state",
+    "properties": ["opacity", "width on progress bar", "transform on reveal"]
+  },
+  "initialLocalBytes": {
+    "html": 8512,
+    "css": 10547,
+    "js": 8906,
+    "icon": 25354,
+    "total": 53319
+  },
+  "performanceLocalFile": {
+    "largestContentfulPaintMs": 160,
+    "cumulativeLayoutShift": 0,
+    "note": "Measured after DOMContentLoaded in Ego/Chromium at 1440×900; file:// resource entries do not report transferSize."
+  },
+  "deferredProofImagesBytes": 304312,
+  "assets": {
+    "banner": { "file": "assets/banner-1544x500.png", "width": 1544, "height": 500, "bytes": 176969 },
+    "card": { "file": "assets/card-1200x630.png", "width": 1200, "height": 630, "bytes": 151877 },
+    "wideGif": { "file": "gifs/demo-wide.gif", "width": 880, "height": 550, "frames": 50, "fps": 12, "bytes": 2426977 },
+    "compactGif": { "file": "gifs/demo-compact.gif", "width": 560, "height": 350, "bytes": 618538 },
+    "video": { "file": "videos/demo.mp4", "width": 1280, "height": 800, "frames": 50, "fps": 12, "durationSeconds": 4.167, "bytes": 163673 }
+  },
+  "visualReview": {
+    "pageViews": ["390", "768", "1440", "1920", "1440 EN", "reduced motion", "no JS"],
+    "sections": ["sequence", "signature", "facts", "final"],
+    "states": ["empty", "drag", "68% processing", "100% result"],
+    "geometryCheck": "demo subject constrained to its container; percent and controls do not overlap"
+  },
+  "checks": {
+    "gitDiffCheck": "pass",
+    "keyboardLanguageSwitch": "pass",
+    "hiddenControlsAt68Percent": "pass"
+  }
+}

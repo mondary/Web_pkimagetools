@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ImgRalph supprime l'arrière-plan de vos images directement dans votre navigateur. Gratuit, local, instantané." />
+  <meta name="theme-color" content="#111615" />
+  <title>ImgRalph — Le fond disparaît. L'image reste.</title>
+  <link rel="icon" href="./icon.png" />
+  <link rel="stylesheet" href="./promo.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="./promo.html" aria-label="ImgRalph, accueil">
+      <span class="brand-mark">IR</span>
+      <span>ImgRalph</span>
+    </a>
+    <nav aria-label="Navigation principale">
+      <a href="#product">Le produit</a>
+      <a href="#how">Comment ça marche</a>
+      <a href="#privacy">Confidentialité</a>
+    </nav>
+    <a class="nav-cta" href="./index.html">Détourer une image <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero" id="product">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pulse"></span> outil d'image local · gratuit</p>
+        <h1>Le fond<br /><em>disparaît.</em><br />L'image reste.</h1>
+        <p class="hero-lede">Détourez vos images en quelques secondes, directement dans votre navigateur. Aucun compte. Aucun fichier envoyé.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="./index.html">Commencer maintenant <span>→</span></a>
+          <a class="text-link" href="#how">Voir comment ça marche <span>↓</span></a>
+        </div>
+        <div class="hero-meta"><span>PNG · JPG · WEBP</span><span class="meta-dot"></span><span>ONNX + WebAssembly</span><span class="meta-dot"></span><span>sans upload</span></div>
+      </div>
+
+      <div class="hero-demo" aria-label="Aperçu du détourage d'image">
+        <div class="demo-window">
+          <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>imgralph / nouveau détourage</span><span class="window-status">local</span></div>
+          <div class="compare">
+            <div class="compare-side before">
+              <span class="side-label">original</span>
+              <div class="photo-frame"><div class="photo-bg"></div><img src="./icon.png" alt="Illustration d'image originale" /></div>
+            </div>
+            <div class="cut-line"><span>→</span></div>
+            <div class="compare-side after">
+              <span class="side-label">détouré</span>
+              <div class="photo-frame checker"><img src="./icon.png" alt="Illustration détourée sur fond transparent" /></div>
+            </div>
+          </div>
+          <div class="demo-footer"><span><b class="green-dot"></b> prêt à télécharger</span><span class="download-mini">PNG transparent <b>↓</b></span></div>
+        </div>
+        <div class="demo-note note-top"><span>01</span> détection automatique</div>
+        <div class="demo-note note-bottom"><span>02</span> pixels conservés</div>
+      </div>
+    </section>
+
+    <section class="signal" aria-label="Principes du produit">
+      <p>Votre image ne quitte jamais votre machine.</p><span></span><p>Pas de compte à créer.</p><span></span><p>Un PNG propre, en un clic.</p>
+    </section>
+
+    <section class="how-section" id="how">
+      <div class="section-intro"><p class="eyebrow">le geste est simple</p><h2>Trois secondes<br /><span>pour y voir clair.</span></h2></div>
+      <div class="steps">
+        <article class="step"><div class="step-no">01</div><div><h3>Déposez</h3><p>Glissez votre image dans ImgRalph ou choisissez-la depuis votre appareil.</p></div><div class="step-icon">＋</div></article>
+        <article class="step"><div class="step-no">02</div><div><h3>ImgRalph découpe</h3><p>Le modèle ONNX travaille dans le navigateur. Vos pixels restent chez vous.</p></div><div class="step-icon">◌</div></article>
+        <article class="step"><div class="step-no">03</div><div><h3>Téléchargez</h3><p>Récupérez un PNG transparent, automatiquement recadré au contenu.</p></div><div class="step-icon">↓</div></article>
+      </div>
+    </section>
+
+    <section class="feature-section" id="privacy">
+      <div class="feature-statement"><p class="eyebrow">pensé pour vos images</p><h2>Simple en surface.<br /><em>Précis sous le capot.</em></h2><a class="text-link" href="./index.html">Tester le détourage <span>↗</span></a></div>
+      <div class="feature-list"><div><strong>100%</strong><span>dans le navigateur</span></div><div><strong>1 px</strong><span>de bordure nette</span></div><div><strong>0</strong><span>fichier conservé</span></div></div>
+    </section>
+
+    <section class="final-cta"><p class="eyebrow">à vous l'image</p><h2>Prêt à enlever<br /><span>le superflu ?</span></h2><a class="button button-primary" href="./index.html">Détourer une image <span>→</span></a></section>
+  </main>
+
+  <footer><a class="brand" href="./promo.html"><span class="brand-mark">IR</span><span>ImgRalph</span></a><p>Un outil libre pour des images plus nettes.</p><a href="https://github.com/mondary/Web_pkimagetools">Voir le code sur GitHub ↗</a></footer>
+</body>
+</html>

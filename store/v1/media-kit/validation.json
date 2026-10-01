@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-30",
+  "scope": "Independent store2 landing and media kit; no existing project file modified",
+  "browser": "Ego Browser / Chromium, macOS",
+  "visual_review": {
+    "fr_widths": [
+      390,
+      768,
+      1440,
+      1920
+    ],
+    "en_widths": [
+      390
+    ],
+    "overflow_test_fr_en_widths": [
+      390,
+      768,
+      1440,
+      1920
+    ],
+    "horizontal_overflow": false,
+    "media": [
+      "banner",
+      "card",
+      "production screenshots",
+      "MP4 playback",
+      "GIF playback",
+      "MP4 contact sheet"
+    ]
+  },
+  "interactions": {
+    "keyboard_range_arrows_and_end": true,
+    "colors_and_reset": true,
+    "sample_download": true,
+    "fr_en_labels_and_metadata": true,
+    "manual_language_persistence": true,
+    "first_supported_browser_language": [
+      "de-DE",
+      "en-US",
+      "fr-FR"
+    ],
+    "detected_language": "en",
+    "blocked_local_storage_manual_selection": true,
+    "reduced_motion_stops_playback_and_static_toggle": true,
+    "no_javascript_content_and_links": true,
+    "file_protocol": true
+  },
+  "performance": {
+    "context": "HTTP loopback Python server, cache disabled, 1440x900, no CPU/network throttling, PerformanceObserver before document load",
+    "lcp_ms": 60,
+    "cls": 0,
+    "document_and_resource_transfer_bytes": 264473,
+    "external_runtime_requests": 0,
+    "limitation": "Single local measurement, not a production/mobile benchmark"
+  },
+  "media": {
+    "mp4": {
+      "width": 1280,
+      "height": 720,
+      "fps": 24,
+      "duration_seconds": 8,
+      "bytes": 199519
+    },
+    "gif_wide": {
+      "width": 960,
+      "height": 540,
+      "frames": 96,
+      "duration_ms": 8000,
+      "infinite_loop": true
+    },
+    "gif_compact": {
+      "width": 480,
+      "height": 270,
+      "frames": 80
+    }
+  },
+  "checks": {
+    "node_syntax": true,
+    "local_html_asset_links": true,
+    "git_diff_check": true
+  },
+  "not_tested": [
+    "Live ONNX inference",
+    "remove.bg API",
+    "Deployed performance",
+    "Other browser engines",
+    "External GitHub/Ko-fi HTTP status"
+  ]
+}

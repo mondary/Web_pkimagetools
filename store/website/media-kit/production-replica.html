@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ImgRalph — réplique de production</title>
+  <link rel="stylesheet" href="./production-replica.css" />
+</head>
+<body>
+  <div class="voile" id="voile">
+    <div class="voile-content"><div class="voile-text">Déposez une image</div></div>
+  </div>
+
+  <div class="fullscreen-progress" id="fullscreenProgress">
+    <div class="fullscreen-progress-bar" id="fullscreenProgressBar"></div>
+    <div class="fullscreen-progress-content">
+      <div class="fullscreen-result"><img id="result" src="../assets/subject.png" alt="" /></div>
+      <div class="fullscreen-progress-percent" id="percent">0%</div>
+      <div class="status" id="status"></div>
+      <div class="download-controls" id="controls" hidden>
+        <label class="control" for="source">Source
+          <select id="source"><option selected>remove.bg (API)</option><option>Local (navigateur)</option></select>
+        </label>
+        <label class="control" for="model">Modèle
+          <select id="model"><option selected>u2net (qualité)</option><option>u2netp (rapide)</option><option>u2net_human_seg (humain)</option></select>
+        </label>
+        <label class="control" for="matte">Détourage
+          <input id="matte" type="range" min="-50" max="200" value="80" /><output>80</output>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <main class="app">
+    <section class="dropzone-area">
+      <div class="dropzone"><span>Déposez une image</span></div>
+    </section>
+  </main>
+</body>
+</html>

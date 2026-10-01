@@ -512,3 +512,6 @@ button:disabled {
     font-size: 1.8rem;
   }
 }
+
+.support-link { position: fixed; bottom: 16px; right: 20px; z-index: 1000; color: #304b3e; font: 13px system-ui, sans-serif; text-underline-offset: 3px; }
+.support-link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
