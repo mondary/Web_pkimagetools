@@ -4,7 +4,7 @@
 
 [FR](README.md) · [EN](README_en.md)
 
-PK · version **2026.10.05**
+PK · version **2026.10.06**
 
 Remove image backgrounds with remove.bg (API, default) or locally in your browser with ONNX and rembg-web. API mode sends the image to the external service.
 

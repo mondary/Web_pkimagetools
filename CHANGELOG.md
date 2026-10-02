@@ -1,5 +1,10 @@
 # Changelog
 
+## [2026.10.06] - 2026-10-02
+
+### Added
+- Dossier `archives/` avec les itérations d'icône écartées (icon2, icon3).
+
 ## [2026.10.05] - 2026-10-02
 
 ### Changed
