@@ -49,3 +49,12 @@ secrets.*
 credentials.*
 AGENTS.md
 openspec/AGENTS.md
+.inspi
+/AGENT.md
+/AGENTS.md
+/CLAUDE.md
+/CODEX.md
+/GEMINI.md
+/GLM.md
+/OPENCODE.md
+.*

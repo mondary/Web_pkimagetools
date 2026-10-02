@@ -1,5 +1,10 @@
 # Changelog
 
+## [2026.10.04] - 2026-10-02
+
+### Changed
+- `.gitignore` étendu : notes d'inspiration, fichiers agents/CLAUDE/CODEX/GEMINI/GLM/OPENCODE et dotfiles locaux exclus du suivi.
+
 ## [2026.10.03] - 2026-10-02
 
 ### Changed

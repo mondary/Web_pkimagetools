@@ -4,7 +4,7 @@
 
 [FR](README.md) · [EN](README_en.md)
 
-PK · version **2026.10.03**
+PK · version **2026.10.04**
 
 Détourage via remove.bg (API, par défaut) ou localement dans le navigateur avec ONNX et rembg-web. Le mode API transmet l’image au service externe.
 
