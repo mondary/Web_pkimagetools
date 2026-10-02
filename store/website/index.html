@@ -41,17 +41,31 @@
         <div class="hero-actions">
           <a class="primary" href="../../src/index.html" data-i18n="hero.open">Détourer une image</a>
           <button class="ghost" type="button" data-replay data-i18n="hero.replay">Revoir le geste</button>
+          <a class="support-button" href="https://ko-fi.com/pouark" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true" focusable="false">
+              <path d="M5 9h19v10a9 9 0 0 1-9 9h-1a9 9 0 0 1-9-9V9Zm19 3h2a4 4 0 0 1 0 8h-2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M14.5 21.5 10 17a3 3 0 0 1 4.5-4 3 3 0 0 1 4.5 4Z" fill="currentColor"/>
+            </svg>
+            <span data-i18n="hero.support">Soutenir sur Ko-fi</span>
+          </a>
         </div>
         <p class="formats" data-i18n="hero.formats">PNG, JPG ou WebP en entrée · PNG transparent en sortie</p>
       </div>
 
       <figure class="hero-ui" aria-labelledby="hero-ui-caption">
-        <div class="production-frame">
-          <div class="real-dropzone" role="img" aria-label="Interface ImgRalph : cadre pointillé plein écran avec le texte Déposez une image">
-            <span>Déposez une image</span>
+          <div class="production-frame" id="heroDemo" data-state="idle" role="img" aria-label="Démonstration animée du dépôt, du traitement et du résultat">
+          <div class="real-dropzone">
+            <span data-i18n="hero.drop">Déposez une image</span>
+          </div>
+          <div class="hero-file" aria-hidden="true"><img src="./assets/synthwave-car.svg" alt="" /><span>retro-drive.png</span></div>
+          <div class="hero-cursor" aria-hidden="true"></div>
+          <div class="hero-processing" aria-hidden="true"><div class="hero-fill" id="heroFill"></div><span class="hero-pct" id="heroPct">0%</span><span class="hero-processing-label" data-i18n="hero.processing">Traitement en cours…</span></div>
+          <div class="hero-finished" aria-hidden="true">
+            <div class="synth-scene"><div class="synth-sun"></div><div class="synth-grid"></div><img src="./assets/synthwave-car.svg" alt="" /></div>
+            <span class="hero-download" data-i18n="hero.download">Télécharger le PNG ↓</span>
           </div>
         </div>
-        <figcaption id="hero-ui-caption" data-i18n="hero.caption">Interface de production — état initial. Cliquez n’importe où pour ouvrir le sélecteur de fichier.</figcaption>
+        <figcaption id="hero-ui-caption" data-i18n="hero.caption">Démo animée du parcours complet. Le traitement est simulé ici ; ouvrez l’outil pour utiliser votre image.</figcaption>
       </figure>
     </section>
 
@@ -70,8 +84,8 @@
           <figcaption><strong>02</strong><span data-i18n="sequence.progress">La progression devient l’écran.</span></figcaption>
         </figure>
         <figure>
-          <img src="./assets/app-result-1600x1000.webp" alt="Résultat terminé : sujet détouré au centre, bouton Télécharger et contrôles Source, Modèle et Détourage." width="1600" height="1000" loading="lazy" decoding="async" />
-          <figcaption><strong>03</strong><span data-i18n="sequence.result">À 100 %, le bouton télécharge.</span></figcaption>
+          <div class="screen-car" role="img" aria-label="Voiture rétro synthwave isolée devant un soleil rose et une grille violette."><div class="synth-scene"><div class="synth-sun"></div><div class="synth-grid"></div><img src="./assets/synthwave-car.svg" alt="" /></div></div>
+          <figcaption><strong>03</strong><span data-i18n="sequence.result">À 100 %, le sujet est isolé.</span></figcaption>
         </figure>
       </div>
     </section>
@@ -80,14 +94,14 @@
       <div class="section-head">
         <p data-i18n="signature.eyebrow">Scène</p>
         <h2 id="signature-title" data-i18n="signature.title">La page devient la barre de progression.</h2>
-        <p class="lede" data-i18n="signature.lede">Cette scène reprend les couleurs, proportions et libellés de l’interface réelle. Elle est locale à la page promotionnelle : aucune image n’est envoyée pendant la visite.</p>
+        <p class="lede" data-i18n="signature.lede">Cette scène illustre le résultat avec une voiture synthwave. La progression est simulée et locale à cette page : aucune image n’est envoyée pendant la visite.</p>
       </div>
 
       <div class="demo-shell" id="demoShell" data-state="idle">
         <div class="demo-bar" id="demoBar"></div>
         <div class="demo-content">
           <div class="demo-result">
-            <img id="demoImage" src="./assets/subject.webp" alt="Sujet botanique détouré, sans arrière-plan." width="900" height="900" loading="lazy" decoding="async" />
+            <img id="demoImage" src="./assets/synthwave-car.svg" alt="Illustration d’une voiture rétro synthwave isolée du décor." width="1000" height="560" loading="lazy" decoding="async" />
           </div>
           <button class="demo-percent" id="demoPercent" type="button">0%</button>
           <p class="demo-status" id="demoStatus" role="status">Image chargée. Lancement du détourage…</p>
@@ -137,7 +151,7 @@
 
     <section class="final reveal">
       <div class="subject-proof" aria-hidden="true">
-        <img src="./assets/subject.webp" alt="" width="900" height="900" loading="lazy" decoding="async" />
+        <img src="./assets/synthwave-car.svg" alt="" width="1000" height="560" loading="lazy" decoding="async" />
       </div>
       <h2 data-i18n="final.title">Le sujet. Et c’est tout.</h2>
       <p data-i18n="final.body">Ouvrez l’outil, déposez une image et laissez ImgRalph faire le reste.</p>

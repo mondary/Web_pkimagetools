@@ -1,5 +1,16 @@
 # Changelog
 
+## [2026.10.03] - 2026-10-02
+
+### Changed
+- Bouton Ko-fi avec pictogramme tasse et cœur ajouté dans le hero de la landing FR/EN.
+
+## [2026.10.02] - 2026-10-02
+
+### Changed
+- Démonstration animée complète dans le haut de la landing : dépôt, progression simulée, résultat et boucle rejouable.
+- Sujet botanique remplacé dans la page par une illustration de voiture synthwave ; la démonstration reste explicitement distincte du vrai traitement.
+
 ## [2026.10.01] - 2026-10-01
 
 ### Added

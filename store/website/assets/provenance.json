@@ -10,6 +10,11 @@
       "subject.webp": "43d2133776f1af113fbfb7f78bbd23c0d7df9f729f802662912d82c22755b785"
     }
   },
+  "currentPromoSubject": {
+    "file": "synthwave-car.svg",
+    "source": "Original local vector illustration created for the store landing; not a photograph or an actual segmentation result.",
+    "usage": "Hero animated demo, result scene and closing section. The old botanical files remain for historical media-kit exports."
+  },
   "interfaceCaptures": {
     "source": "store3/media-kit/production-replica.html and production-replica.css, copied from the tokens, DOM structure and visible states of src/index.html and src/style.css.",
     "states": ["empty", "drag veil", "68% processing with controls hidden", "100% result with controls visible"],

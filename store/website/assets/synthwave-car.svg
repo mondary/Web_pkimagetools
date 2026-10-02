@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title">
+  <title id="title">Coupé rétro aux reflets rose et cyan</title>
+  <defs>
+    <linearGradient id="paint" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffb0d5"/><stop offset=".33" stop-color="#e24c9c"/><stop offset=".7" stop-color="#763681"/><stop offset="1" stop-color="#232b64"/></linearGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%"><stop stop-color="#64e9f4"/><stop offset=".55" stop-color="#294d75"/><stop offset="1" stop-color="#13142d"/></linearGradient>
+    <linearGradient id="side" x1="0%" y1="0%" x2="0%" y2="100%"><stop stop-color="#fb82bd"/><stop offset=".28" stop-color="#a84599"/><stop offset=".65" stop-color="#602763"/><stop offset="1" stop-color="#1c1b3e"/></linearGradient>
+    <radialGradient id="wheel"><stop stop-color="#93edee"/><stop offset=".17" stop-color="#182038"/><stop offset=".43" stop-color="#b9c3d1"/><stop offset=".52" stop-color="#151527"/><stop offset=".76" stop-color="#25283e"/><stop offset="1" stop-color="#080d1d"/></radialGradient>
+    <filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+  <ellipse cx="508" cy="464" rx="425" ry="37" fill="#f24dba" opacity=".4" filter="url(#glow)"/>
+  <path d="M70 379 114 365 164 291 282 258 357 179 430 153 653 151 737 178 816 267 920 297 959 331 952 402 919 421 114 425 64 408Z" fill="url(#side)" stroke="#ffa9db" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M292 257 371 192 433 165 646 163 711 188 779 265Z" fill="url(#glass)" stroke="#9ef7f2" stroke-width="6"/>
+  <path d="m575 165-35 100M710 188l-33 77" stroke="#d3faff" stroke-width="7" opacity=".8"/>
+  <path d="M114 366 248 336 822 323 950 345 939 380 121 388Z" fill="url(#paint)" opacity=".7"/>
+  <path d="M87 392 955 385 949 407 919 421 114 425 64 408Z" fill="#11132c"/>
+  <path d="M128 367 270 343M750 327l157 20" stroke="#ffdbf0" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+  <path d="M109 406h809" stroke="#65e9ea" stroke-width="5" opacity=".8"/>
+  <path d="M102 367h78l-12 18-81 2Z" fill="#ffe8cc"/>
+  <path d="M874 341h67l9 21-83-4Z" fill="#ff4c9a"/>
+  <path d="M208 391a78 78 0 0 1 156 0M681 391a78 78 0 0 1 156 0" fill="none" stroke="#171629" stroke-width="31"/>
+  <circle cx="286" cy="402" r="70" fill="url(#wheel)" stroke="#11101e" stroke-width="12"/>
+  <circle cx="759" cy="402" r="70" fill="url(#wheel)" stroke="#11101e" stroke-width="12"/>
+  <circle cx="286" cy="402" r="14" fill="#b6fcf5"/><circle cx="759" cy="402" r="14" fill="#b6fcf5"/>
+  <path d="M395 304h96" stroke="#ffb9de" stroke-width="6" stroke-linecap="round"/>
+  <path d="M338 285h460" stroke="#81f0f0" stroke-width="4" opacity=".55"/>
+  <path d="M742 218 811 267 923 292" fill="none" stroke="#f9a4d3" stroke-width="5"/>
+</svg>

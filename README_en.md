@@ -4,7 +4,7 @@
 
 [FR](README.md) · [EN](README_en.md)
 
-PK · version **2026.10.01**
+PK · version **2026.10.03**
 
 Remove image backgrounds with remove.bg (API, default) or locally in your browser with ONNX and rembg-web. API mode sends the image to the external service.
 
@@ -33,7 +33,7 @@ To view the FR/EN promotional page:
 python3 -m http.server 4174
 ```
 
-Open http://localhost:4174/store/website/index.html. The previous version remains in `store/v1/`.
+Open http://localhost:4174/store/website/index.html. The landing shows an animated drop-to-result sequence with a synthwave car and a Ko-fi support button; this promotional processing is simulated and uploads no image. The previous version remains in `store/v1/`.
 
 ## History
 

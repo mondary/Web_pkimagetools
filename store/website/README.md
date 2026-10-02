@@ -10,15 +10,15 @@ Depuis la racine du dépôt :
 
 Puis ouvrir :
 
-    http://localhost:4174/store3/index.html
+    http://localhost:4174/store/website/index.html
 
 ## Contenu
 
-- store3/index.html — landing FR/EN autonome.
-- store3/style.css — style, scène de progression et responsive.
-- store3/store.js — détection de langue, bascule manuelle, progression locale.
+- store/website/index.html — landing FR/EN autonome, démonstration automatique et rejouable dans le hero.
+- store/website/style.css — style, scène de progression et responsive.
+- store/website/store.js — détection de langue, bascule manuelle, progression locale.
 - store3/screenshots — captures 16:10 des états vide, drag, progression et résultat.
-- store3/assets — bannière 1544×500, carte 1200×630, sujet et versions WebP.
+- store/website/assets — bannière 1544×500, carte 1200×630, illustration de voiture synthwave et anciennes captures conservées.
 - store3/gifs — boucle large et boucle compacte.
 - store3/videos — master MP4.
 - store3/media-kit — réplique de production, scripts Ego et captures de QA.
@@ -26,6 +26,8 @@ Puis ouvrir :
 ## Vérité produit
 
 L’application propose remove.bg via API ou un moteur local ONNX/rembg-web. Le mode API envoie l’image au service ; le mode local télécharge ses dépendances et son modèle. Le curseur de détourage va de -50 à 200, le contenu est recadré automatiquement avec une bordure de 1 px, et l’export est un PNG transparent. Il n’y a pas d’éditeur de fond dans l’application ; Store 3 ne le suggère plus.
+
+La séquence du hero est une illustration promotionnelle en SVG avec progression simulée, non une capture du traitement ni une photo détourée. Elle fonctionne sans réseau et s’arrête hors écran ; en mode mouvement réduit, le résultat est affiché directement. Les anciennes captures et exports du media-kit restent archivés tels quels.
 
 ## Reproductibilité
 

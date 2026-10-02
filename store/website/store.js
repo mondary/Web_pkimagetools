@@ -13,16 +13,20 @@
       "hero.lede": "ImgRalph ne vous installe pas dans un atelier compliqué. La page entière est la zone de dépôt, le traitement remplit l’écran, puis le bouton devient « Télécharger ».",
       "hero.open": "Détourer une image",
       "hero.replay": "Revoir le geste",
+      "hero.support": "Soutenir sur Ko-fi",
       "hero.formats": "PNG, JPG ou WebP en entrée · PNG transparent en sortie",
-      "hero.caption": "Interface de production — état initial. Cliquez n’importe où pour ouvrir le sélecteur de fichier.",
+      "hero.drop": "Déposez une image",
+      "hero.processing": "Traitement en cours…",
+      "hero.download": "Télécharger le PNG ↓",
+      "hero.caption": "Démo animée du parcours complet. Le traitement est simulé ici ; ouvrez l’outil pour utiliser votre image.",
       "sequence.eyebrow": "Preuve",
       "sequence.title": "Trois écrans, un seul geste.",
       "sequence.drag": "Le drag recouvre toute la page.",
       "sequence.progress": "La progression devient l’écran.",
-      "sequence.result": "À 100 %, le bouton télécharge.",
+      "sequence.result": "À 100 %, le sujet est isolé.",
       "signature.eyebrow": "Scène",
       "signature.title": "La page devient la barre de progression.",
-      "signature.lede": "Cette scène reprend les couleurs, proportions et libellés de l’interface réelle. Elle est locale à la page promotionnelle : aucune image n’est envoyée pendant la visite.",
+      "signature.lede": "Cette scène illustre le résultat avec une voiture synthwave. La progression est simulée et locale à cette page : aucune image n’est envoyée pendant la visite.",
       "signature.replay": "Rejouer la progression",
       "facts.eyebrow": "Ce que l’app fait vraiment",
       "facts.title": "Deux sources, trois modèles, un PNG.",
@@ -48,16 +52,20 @@
       "hero.lede": "ImgRalph doesn’t put you in a complicated studio. The whole page is the drop zone, processing fills the screen, then the button becomes “Download.”",
       "hero.open": "Remove an image background",
       "hero.replay": "See the gesture again",
+      "hero.support": "Support on Ko-fi",
       "hero.formats": "PNG, JPG, or WebP in · transparent PNG out",
-      "hero.caption": "Production interface — initial state. Click anywhere to open the file picker.",
+      "hero.drop": "Drop an image",
+      "hero.processing": "Processing…",
+      "hero.download": "Download PNG ↓",
+      "hero.caption": "Animated walkthrough from drop to result. Processing is simulated here; open the tool to use your own image.",
       "sequence.eyebrow": "Proof",
       "sequence.title": "Three screens, one gesture.",
       "sequence.drag": "Dragging covers the entire page.",
       "sequence.progress": "Progress becomes the screen.",
-      "sequence.result": "At 100%, the button downloads.",
+      "sequence.result": "At 100%, the subject stands alone.",
       "signature.eyebrow": "Scene",
       "signature.title": "The page becomes the progress bar.",
-      "signature.lede": "This scene uses the real interface’s colors, proportions, and labels. It stays local to this promotional page: no image is uploaded while you visit.",
+      "signature.lede": "This scene illustrates the result with a synthwave car. Progress is simulated and local to this page: no image is uploaded while you visit.",
       "signature.replay": "Replay the progress",
       "facts.eyebrow": "What the app actually does",
       "facts.title": "Two sources, three models, one PNG.",
@@ -79,7 +87,7 @@
     fr: ["Image chargée. Lancement du détourage…", "Traitement en cours…", "Terminé !"],
     en: ["Image loaded. Starting cutout…", "Processing…", "Done!"]
   };
-  const readyLabels = { fr: "Télécharger", en: "Download" };
+  const readyLabels = { fr: "Rejouer", en: "Replay" };
 
   let currentLang = "fr";
   let frame = null;
@@ -93,10 +101,57 @@
   const controls = document.getElementById("demoControls");
   const matte = document.getElementById("demoMatte");
   const matteValue = document.getElementById("demoMatteValue");
+  const heroDemo = document.getElementById("heroDemo");
+  const heroFill = document.getElementById("heroFill");
+  const heroPct = document.getElementById("heroPct");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let heroTimers = [];
+  let heroFrame = null;
+  let heroVisible = true;
+
+  function stopHero() {
+    heroTimers.forEach(clearTimeout);
+    heroTimers = [];
+    if (heroFrame !== null) cancelAnimationFrame(heroFrame);
+    heroFrame = null;
+  }
+
+  function scheduleHero(callback, delay) {
+    heroTimers.push(setTimeout(callback, delay));
+  }
+
+  function playHero() {
+    stopHero();
+    heroFill.style.width = "0%";
+    heroPct.textContent = "0%";
+    heroDemo.dataset.state = "idle";
+    if (reducedMotion.matches) {
+      heroDemo.dataset.state = "done";
+      return;
+    }
+    scheduleHero(() => { heroDemo.dataset.state = "drag"; }, 650);
+    scheduleHero(() => {
+      heroDemo.dataset.state = "processing";
+      const start = performance.now();
+      function advance(now) {
+        const pct = Math.min(100, Math.round((now - start) / 2500 * 100));
+        heroFill.style.width = pct + "%";
+        heroPct.textContent = pct + "%";
+        if (pct < 100) heroFrame = requestAnimationFrame(advance);
+        else heroFrame = null;
+      }
+      heroFrame = requestAnimationFrame(advance);
+    }, 2250);
+    scheduleHero(() => { heroDemo.dataset.state = "done"; }, 5050);
+    scheduleHero(() => { if (heroVisible && !document.hidden) playHero(); }, 9000);
+  }
 
   function applyLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
+    heroDemo.setAttribute("aria-label", lang === "fr" ? "Démonstration animée : dépôt, traitement simulé, résultat synthwave" : "Animated demo: drop, simulated processing, synthwave result");
+    document.querySelector(".screen-car").setAttribute("aria-label", lang === "fr" ? "Voiture rétro synthwave devant un soleil rose et une grille violette" : "Retro synthwave car in front of a pink sun and violet grid");
+    document.getElementById("demoImage").alt = lang === "fr" ? "Illustration d’une voiture rétro synthwave isolée du décor." : "Illustration of a retro synthwave car isolated from the background.";
     document.querySelectorAll("[data-i18n]").forEach((node) => {
       const value = messages[lang][node.dataset.i18n];
       if (value) node.textContent = value;
@@ -159,12 +214,24 @@
   });
   document.querySelectorAll("[data-replay]").forEach((button) => {
     button.addEventListener("click", () => {
-      document.querySelector(".signature").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
-      });
-      replay();
+      const inSignature = button.closest(".signature");
+      const target = inSignature ? document.querySelector(".signature") : heroDemo;
+      target.scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth", block: "center" });
+      if (inSignature) replay();
+      else playHero();
     });
   });
+  const heroObserver = new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    if (heroVisible && !document.hidden) playHero();
+    else stopHero();
+  }, { threshold: 0.1 });
+  heroObserver.observe(heroDemo);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopHero();
+    else if (heroVisible) playHero();
+  });
+  reducedMotion.addEventListener("change", () => { if (heroVisible) playHero(); });
   matte.addEventListener("input", () => {
     matteValue.textContent = matte.value;
   });

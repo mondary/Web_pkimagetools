@@ -4,7 +4,7 @@
 
 [FR](README.md) · [EN](README_en.md)
 
-PK · version **2026.10.01**
+PK · version **2026.10.03**
 
 Détourage via remove.bg (API, par défaut) ou localement dans le navigateur avec ONNX et rembg-web. Le mode API transmet l’image au service externe.
 
@@ -33,7 +33,7 @@ Pour consulter la page promotionnelle FR/EN :
 python3 -m http.server 4174
 ```
 
-Ouvrir http://localhost:4174/store/website/index.html. La version précédente reste dans `store/v1/`.
+Ouvrir http://localhost:4174/store/website/index.html. La landing montre une séquence animée de dépôt à résultat avec une voiture synthwave et un bouton de soutien Ko-fi ; ce traitement promotionnel est simulé et n’envoie pas d’image. La version précédente reste dans `store/v1/`.
 
 ## Historique
 
