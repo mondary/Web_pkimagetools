@@ -1,5 +1,10 @@
 # Changelog
 
+## [2026.10.05] - 2026-10-02
+
+### Changed
+- Nouvelle icône d'application (badge PK, gomme et détourage) et déclinaison 128 px régénérée pour la landing.
+
 ## [2026.10.04] - 2026-10-02
 
 ### Changed
